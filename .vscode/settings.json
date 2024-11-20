@@ -1,0 +1,25 @@
+{
+    "java.completion.importOrder": ["#"],
+    "java.project.sourcePaths": [
+        "src"
+    ],
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "path": "/Users/marcusvaitschulis/Library/Java/JavaVirtualMachines/corretto-21.0.1/Contents/Home",
+            "default": true
+        },
+        {
+            "name": "JavaSE-17",
+            "path": "/Users/marcusvaitschulis/Library/Java/JavaVirtualMachines/corretto-17.0.7/Contents/Home",
+            // "default": true
+        },
+    ],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "./lib/**/*.jar"
+    ],
+    "css.lint.vendorPrefix": "ignore",
+    "editor.defaultFormatter": "josevseb.google-java-format-for-vs-code",
+    "git.ignoreLimitWarning": true,
+}

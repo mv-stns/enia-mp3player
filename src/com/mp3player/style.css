@@ -1,0 +1,84 @@
+/* [category][component][property][state]
+eg: color button background default
+or: color button text hover default
+*/
+
+
+.root {
+    -icon-color: rgba(50, 50, 50, 1);
+    -media-control-bg: rgba(50, 50, 50, 1);
+    -color-button-background-default: rgb(255, 255, 255);
+    -color-button-background-hover: rgb(207, 207, 207);
+    -color-button-background-pressed: rgb(136, 136, 136);
+    -color-button-background-disabled: rgb(89, 89, 89);
+    -effects-button-background-default: innershadow(two-pass-box, rgba(255, 255, 255, 0.8), 4, 0, 0, 3);
+}
+
+.button {
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+}
+
+/* MP3 CONTROLS */
+#control-wrapper {
+    -fx-hgap: 20px;
+    -fx-background-color: -media-control-bg;
+    /* -fx-background-color: red; */
+    -fx-background-radius: 999em;
+    -fx-border-radius: 50px;
+    /* -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 2, 25, 0, 0); */
+}
+
+.control-buttons {
+    -fx-background-color: linear-gradient(to bottom, -color-button-background-default, -color-button-background-hover);
+    -fx-background-radius: 999em;
+    /* -fx-effect: -effects-button-background-default; */
+    -fx-border-width: 2px;
+    -fx-border-color: -media-control-bg;
+    -fx-border-radius: 999em;
+    -fx-border-insets: -2;
+}
+
+.control-buttons:hover {
+    -fx-background-color: -color-button-background-hover;
+}
+
+.control-buttons:pressed {
+    -fx-background-color: -color-button-background-pressed;
+}
+
+.control-buttons:disabled {
+    -fx-background-color: -color-button-background-disabled;
+}
+
+.control-icons {
+    -fx-fill: -icon-color;
+}
+
+
+/* SLIDER */
+.slider .track {
+    -fx-background-color: linear-gradient(to top, rgb(255, 94, 0) 20%, -color-button-background-hover 20%);
+    -fx-background-insets: 0 0 -1 0, 0, 1;
+    -fx-background-radius: 0.25em, 0.25em, 0.166667em;
+    /* 3 3 2 */
+    -fx-padding: 0.2em;
+}
+
+.slider .thumb {
+    -fx-background-color: linear-gradient(to bottom, -color-button-background-default, -color-button-background-hover);
+    -fx-border-style: solid;
+    -fx-border-width: 2px;
+    -fx-border-color: -media-control-bg;
+    -fx-border-radius: 999em;
+    -fx-border-insets: -2;
+    /* inward subtle shadow */
+    /* -fx-effect: -effects-button-background-default; */
+}
+
+.slider .thumb:hover {
+    -fx-background-color: -color-button-background-hover;
+}
+
+.slider .thumb:pressed {
+    -fx-background-color: -color-button-background-pressed;
+}
