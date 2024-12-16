@@ -13,6 +13,7 @@ public class KeyboardController {
   }
 
   public void executeCommand(String c) {
+
     String[] command = c.split(" ");
     try {
       MP3Controls control = MP3Controls.valueOf(command[0].toUpperCase());
@@ -32,6 +33,12 @@ public class KeyboardController {
           break;
         case STOP:
           player.stop();
+          break;
+        case NEXT:
+          player.next();
+          break;
+        case PREVIOUS:
+          player.previous();
           break;
         case LOOP:
           player.loop();
@@ -65,7 +72,7 @@ public class KeyboardController {
       }
     } catch (Exception e) {
       System.out.println(Formatting.RED_BOLD + "Invalid command. Please try again." + Formatting.RESET);
-      // e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
