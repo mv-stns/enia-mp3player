@@ -82,3 +82,26 @@ or: color button text hover default
 .slider .thumb:pressed {
     -fx-background-color: -color-button-background-pressed;
 }
+
+/* big album cover */
+.album-cover {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-radius: 12;
+    -fx-background-color: -media-control-bg;
+    -fx-overflow: hidden;
+}
+
+.mainContainer {
+    /* OTHER STYLES */
+    -fx-background-radius: 12;
+    -fx-background-image: url("/resources/images/pattern.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: repeat;
+    -fx-background-color: #141414;
+    
+    /* BORDER SETTINGS */
+    -fx-border-style: solid;
+    -fx-border-width: 0.5;
+    -fx-border-color: linear-gradient(to bottom, white 0%, black 100%);
+}
