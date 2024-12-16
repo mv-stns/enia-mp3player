@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.mp3player.App",
+            "projectName": "task_d3bfc485"
+        },
+        {
+            "type": "java",
             "name": "App (not long)",
             "request": "launch",
             "mainClass": "com.mp3player.view.App",
