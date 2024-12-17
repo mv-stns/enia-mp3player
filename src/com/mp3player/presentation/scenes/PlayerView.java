@@ -8,16 +8,14 @@ import javafx.scene.layout.VBox;
 
 public class PlayerView extends BorderPane {
 
-  private SongInfo songInfo;
-  private Controls controls;
-  private MP3Player player;
+  SongInfo songInfo;
+  Controls controls;
   VBox mainPane;
 
-  public PlayerView(MP3Player player) {
-    this.player = player;
+  public PlayerView() {
     controls = new Controls();
     mainPane = new VBox(12);
-    songInfo = new SongInfo(player);
+    songInfo = new SongInfo();
     this.setCenter(mainPane);
     mainPane.getChildren().addAll(songInfo, controls);
     mainPane.setStyle("-fx-background-radius: 10;");

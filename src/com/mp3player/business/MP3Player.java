@@ -7,6 +7,8 @@ import de.hsrm.mi.eibo.simpleplayer.*;
 import de.hsrm.mi.prog.util.StaticScanner;
 import de.vaitschulis.utils.Formatting;
 import java.util.Arrays;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * A class that implements an MP3 player with basic audio playback functionality. This player
@@ -30,6 +32,10 @@ public class MP3Player {
   private boolean paused;
   private PlaylistManager songFileManager;
   private float volume;
+  private SimpleIntegerProperty currentTime;
+  private SimpleStringProperty title;
+  private SimpleStringProperty artist;
+  private SimpleStringProperty album;
 
   /**
    * Checks if the current track is paused.
@@ -74,9 +80,10 @@ public class MP3Player {
   public MP3Player() {
     minim = new SimpleMinim(true);
     loadSoundFiles();
-    this.muted = false;
-    this.looping = false;
-    this.volume = normalizeAudioPercentage(100);
+    muted = false;
+    looping = false;
+    volume = normalizeAudioPercentage(100);
+    currentTime = new SimpleIntegerProperty();
   }
 
   /**
@@ -154,26 +161,29 @@ public class MP3Player {
    * @param vol volume level as percentage (0-100)
    */
   public synchronized void volume(float vol) {
-    this.volume = vol;
-    try {
-      if (audioPlayer == null) {
-        System.out.println(Formatting.RED_BOLD + "No song is playing." + Formatting.RESET);
-        return;
-      }
-      float gainDB = normalizeAudioPercentage(vol);
-      audioPlayer.setGain(gainDB);
-      System.out.println(
-          Formatting.BLUE_BOLD
-              + "Volume set to "
-              + vol
-              + "% ("
-              + String.format("%.2f", gainDB)
-              + " dB)"
-              + Formatting.RESET);
-      this.volume = gainDB;
-    } catch (Exception e) {
-      System.out.println(Formatting.RED_BOLD + "Invalid volume." + Formatting.RESET);
-    }
+    // debug(Formatting.RED_BOLD + "CURRENT VOL IS:" + volume + Formatting.RESET);
+    // this.volume = (vol == 0.0f ? 50.0f : vol);
+    // debug(Formatting.RED_BOLD + "CURRENT VOL IS:" + volume + Formatting.RESET);
+    // try {
+    //   if (audioPlayer == null) {
+    //     System.out.println(Formatting.RED_BOLD + "No song is playing." + Formatting.RESET);
+    //     return;
+    //   }
+    //   float gainDB = normalizeAudioPercentage(vol);
+    //   audioPlayer.setGain(gainDB);
+    //   System.out.println(
+    //       Formatting.BLUE_BOLD
+    //           + "Volume set to "
+    //           + vol
+    //           + "% ("
+    //           + String.format("%.2f", gainDB)
+    //           + " dB)"
+    //           + Formatting.RESET);
+    //   this.volume = gainDB;
+    // } catch (Exception e) {
+    //   System.out.println(Formatting.RED_BOLD + "Invalid volume." + Formatting.RESET);
+    // }
+    this.volume = 50;
   }
 
   /**
@@ -230,7 +240,7 @@ public class MP3Player {
   public synchronized void play() {
     int selectedSong;
     if (audioPlayer == null || (!isSongPlaying() && !isPaused()) || isPaused()) {
-      selectedSong = selectSong();
+      selectedSong = 0;
       if (selectedSong != -1) {
         this.play(selectedSong);
       }
@@ -244,6 +254,12 @@ public class MP3Player {
       System.out.println(Formatting.RED_BOLD + "Song is already playing." + Formatting.RESET);
     }
     volume(getVolume());
+
+    Thread timeThread = new Thread(){
+      public void run() {
+        
+      }
+    };
   }
 
   /**

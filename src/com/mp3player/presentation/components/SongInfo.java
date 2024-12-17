@@ -17,8 +17,7 @@ public class SongInfo extends HBox {
     private Text songArtist;
     private Text songAlbum;
 
-    public SongInfo(MP3Player player) {
-        this.player = player;
+    public SongInfo() {
         songTitle = new Text("Title");
         songArtist = new Text("Artist");
         songAlbum = new Text("Album");
