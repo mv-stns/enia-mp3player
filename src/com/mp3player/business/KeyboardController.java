@@ -1,6 +1,5 @@
-package com.mp3player.controller;
+package com.mp3player.business;
 
-import com.mp3player.model.MP3Player;
 import com.mp3player.model.Track;
 import de.vaitschulis.utils.Formatting;
 

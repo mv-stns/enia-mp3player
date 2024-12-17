@@ -1,6 +1,6 @@
-package com.mp3player.view.components;
+package com.mp3player.presentation.components;
 
-import com.mp3player.model.MP3Player;
+import com.mp3player.business.MP3Player;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;

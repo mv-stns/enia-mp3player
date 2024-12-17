@@ -1,5 +1,8 @@
-package com.mp3player.model;
+package com.mp3player.business;
 
+import static com.mp3player.utils.Constants.*;
+
+import com.mp3player.model.Track;
 import de.hsrm.mi.eibo.simpleplayer.*;
 import de.hsrm.mi.prog.util.StaticScanner;
 import de.vaitschulis.utils.Formatting;
@@ -85,7 +88,7 @@ public class MP3Player {
     try {
       songFileManager = new PlaylistManager();
     } catch (NullPointerException e) {
-      System.out.println(e.getStackTrace());
+      debug(Arrays.toString(e.getStackTrace()));
     }
   }
 

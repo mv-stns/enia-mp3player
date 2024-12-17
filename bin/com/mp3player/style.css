@@ -103,5 +103,6 @@ or: color button text hover default
     /* BORDER SETTINGS */
     -fx-border-style: solid;
     -fx-border-width: 0.5;
-    -fx-border-color: linear-gradient(to bottom, white 0%, black 100%);
+    -fx-border-color: #292929;
+    /* -fx-border-color: linear-gradient(to bottom, white 0%, black 100%); */
 }

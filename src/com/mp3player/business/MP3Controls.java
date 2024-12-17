@@ -1,4 +1,4 @@
-package com.mp3player.controller;
+package com.mp3player.business;
 
 public enum MP3Controls {
     // Track Related
