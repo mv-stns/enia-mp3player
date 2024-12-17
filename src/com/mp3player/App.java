@@ -1,6 +1,7 @@
 package com.mp3player;
 
 import com.mp3player.presentation.scenes.PlayerView;
+import com.mp3player.presentation.scenes.PlayerViewController;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.application.Application;
@@ -27,6 +28,7 @@ import com.mp3player.business.MP3Player;
 public class App extends Application {
   private static Scene scene;
   private static PlayerView playerView;
+  private static PlayerViewController playerViewController;
   private boolean isTrafficLightAnimating = false;
   private boolean isTrafficLightVisible = false;
 
@@ -37,7 +39,8 @@ public class App extends Application {
   @Override
   public void start(Stage mainStage) throws Exception {
     MP3Player player = new MP3Player();
-    playerView = new PlayerView(player);
+    playerViewController = new PlayerViewController(player);
+    playerView = playerViewController.getRoot();
 
     scene = new Scene(playerView, 1440, 800);
     mainStage.initStyle(StageStyle.TRANSPARENT);
