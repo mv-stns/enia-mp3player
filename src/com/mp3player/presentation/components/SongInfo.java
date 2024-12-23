@@ -1,44 +1,87 @@
 package com.mp3player.presentation.components;
 
+import static com.mp3player.utils.Constants.*;
+
 import com.mp3player.business.MP3Player;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import mp3player.scene.layout.ImageViewPane;
 
-public class SongInfo extends HBox {
+public class SongInfo extends VBox {
 
-    MP3Player player;
-    private StackPane songInfo;
-    private ImageViewPane albumCover;
-    private Text songTitle;
-    private Text songArtist;
-    private Text songAlbum;
+  MP3Player player;
+  private VBox songInfo;
+  public ImageView albumCover;
+  private ImageViewPane albumCoverWrapper;
+  public Text songTitle;
+  public Text songArtist;
+  public Text songAlbum;
+  public Image cover;
+  private TimerView timerView;
 
-    public SongInfo() {
-        songTitle = new Text("Title");
-        songArtist = new Text("Artist");
-        songAlbum = new Text("Album");
+  public SongInfo() {
+    final int imageWidth = 100;
+    songTitle = new Text("Title");
+    songTitle.setFont(Font.loadFont("file:src/resources/fonts/SF-Pro-Rounded-Semibold.otf", 28));
+    songTitle.getStyleClass().addAll("song-title");
+    songTitle.setWrappingWidth(400);
+    songArtist = new Text("Artist");
+    songArtist.setFont(Font.loadFont("file:src/resources/fonts/SF-Pro-Rounded-Semibold.otf", 16));
+    songArtist.setFill(Color.rgb(107, 107, 107));
+    songArtist.getStyleClass().add("song-artist");
+    songAlbum = new Text("Album");
+    songAlbum.getStyleClass().add("song-album");
+    songAlbum.setFill(Color.rgb(107, 107, 107));
+    songAlbum.getStyleClass().add("song-artist");
 
-        HBox songDetails = new HBox(10);
-        songDetails.getChildren().addAll(songTitle, songArtist, songAlbum);
-        // songDetails.getStyle
+    songInfo = new VBox();
+    songInfo.setMaxWidth(400);
+    songInfo.getStyleClass().add("song-info");
 
-        songInfo = new StackPane();
-        albumCover = new ImageViewPane();
-        songInfo.getStyleClass().add("song-info");
-        albumCover.getStyleClass().add("album-cover");
-        albumCover.setStyle("-fx-background-image: url(\"file:src/resources/images/album_cover.png\");");
-                        
-        albumCover.setMinWidth(400);
-        albumCover.setMinHeight(400);
-        songInfo.getChildren().addAll(albumCover, songDetails);
-        songDetails.setAlignment(Pos.BOTTOM_LEFT);
-        songDetails.setPadding(new Insets(12));
-        this.setAlignment(Pos.CENTER);
-        this.getChildren().addAll(songInfo);
-    }
+    albumCover = new ImageView();
+    setImage();
+    albumCoverWrapper = new ImageViewPane(albumCover);
+    albumCoverWrapper.getStyleClass().add("album-cover");
+    albumCoverWrapper.setPrefSize(imageWidth, imageWidth);
+    albumCoverWrapper.setMinSize(imageWidth, imageWidth);
+    albumCoverWrapper.setMaxSize(imageWidth, imageWidth);
 
+    Rectangle mask = new Rectangle(imageWidth, imageWidth);
+    mask.setArcWidth(24);
+    mask.setArcHeight(24);
+    albumCoverWrapper.setClip(mask);
+
+    VBox songDetails = new VBox(10);
+    songDetails.getChildren().addAll(albumCoverWrapper, songTitle, songArtist, songAlbum);
+    songInfo.getChildren().addAll(songDetails);
+    songDetails.setAlignment(Pos.BOTTOM_LEFT);
+    this.setAlignment(Pos.CENTER);
+    this.getChildren().addAll(songInfo);
+  }
+
+  private void setImage() {
+    Image placeholder = new Image("file:src/resources/images/album_cover.png");
+    albumCover.setImage(placeholder);
+    albumCover.setPreserveRatio(true);
+  }
+
+  public void setImage(Image img) {
+    albumCover.setImage(img);
+    albumCover.setPreserveRatio(true);
+    albumCover.setFitHeight(albumCoverWrapper.getHeight());
+  }
 }

@@ -1,5 +1,9 @@
 package com.mp3player;
 
+import static com.mp3player.utils.Constants.*;
+
+import com.mp3player.App.ResizeGrabber;
+import com.mp3player.business.MP3Player;
 import com.mp3player.presentation.scenes.PlayerView;
 import com.mp3player.presentation.scenes.PlayerViewController;
 import javafx.animation.FadeTransition;
@@ -20,10 +24,6 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import static com.mp3player.utils.Constants.*;
-
-import com.mp3player.App.ResizeGrabber;
-import com.mp3player.business.MP3Player;
 
 public class App extends Application {
   private static Scene scene;
@@ -45,12 +45,13 @@ public class App extends Application {
     scene = new Scene(playerView, 1440, 800);
     mainStage.initStyle(StageStyle.TRANSPARENT);
     mainStage.resizableProperty().setValue(Boolean.TRUE);
+    mainStage.setMinWidth(434);
     scene.setFill(null);
     StackPane mainContainer = new StackPane();
     mainContainer.getStyleClass().add("mainContainer");
 
     // Rounded Corners for root
-    mainContainer.setPadding(new Insets(20, 20, 20, 20));
+    mainContainer.setPadding(new Insets(24, 24, 24, 24));
     mainContainer.minWidth(450);
     mainContainer.getChildren().add(playerView);
     mainContainer.setAlignment(Pos.CENTER);
@@ -72,9 +73,8 @@ public class App extends Application {
     root.setMinWidth(Region.USE_PREF_SIZE);
     root.setMinHeight(Region.USE_PREF_SIZE);
     root.setStyle("-fx-background-color: transparent;");
-    // set subtle dropshadow inset for the mainContainer creating a subtle white 1px
-    // no blur dropshadow border on the inside top
 
+    root.setPrefWidth(400);
     scene.setRoot(root);
 
     scene.getStylesheets().add("file:src/com/mp3player/style.css");
@@ -82,7 +82,7 @@ public class App extends Application {
     // setActions
     root.setOnMouseMoved(
         (MouseEvent event) -> {
-          debug(String.format("X: %s, Y: %s", event.getSceneX(), event.getSceneY()));
+          // debug(String.format("X: %s, Y: %s", event.getSceneX(), event.getSceneY()));
           boolean visibleArea = event.getSceneX() <= 150 && event.getSceneY() <= 250;
           if (!isTrafficLightAnimating && visibleArea != isTrafficLightVisible) {
             isTrafficLightAnimating = true;
@@ -212,7 +212,7 @@ public class App extends Application {
             " Q 0 0 "
             + r
             + " 0 Z\";"; // p0,p1
-    debug(s);
+    // debug(s);
     signUp.setStyle(s);
   }
 

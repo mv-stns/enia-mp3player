@@ -15,8 +15,8 @@ public class AdditionalFuncs {
         path.setContent(svgPath);
         path.getStyleClass().add("control-icons");
 
-        path.setScaleX(0.8);
-        path.setScaleY(0.8);
+        // path.setScaleX(1);
+        // path.setScaleY(1);
         path.maxWidth(10);
 
         Button button = new Button();
@@ -24,8 +24,8 @@ public class AdditionalFuncs {
         button.setAlignment(Pos.CENTER);
         button.setPadding(new Insets(0));
         button.getStyleClass().addAll("control-buttons");
-        button.setMinWidth(35);
-        button.setMinHeight(35);
+        button.setMinWidth(42);
+        button.setMinHeight(42);
 
         return button;
     }

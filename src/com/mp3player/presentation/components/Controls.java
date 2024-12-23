@@ -1,23 +1,19 @@
 package com.mp3player.presentation.components;
 
+import static com.mp3player.utils.Constants.*;
+
 import com.mp3player.utils.AdditionalFuncs;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.scene.shape.SVGPath;
 
 public class Controls extends HBox implements Styleable {
 
@@ -26,22 +22,14 @@ public class Controls extends HBox implements Styleable {
   public Button prevButton;
   public Button playButton;
   public Button pauseButton;
-  public Button shuffleButton;
   public Button volumeButton;
+  public Button loopButton;
+  public Slider timeSlider;
+  public Slider volumeSlider;
+  public TimerView timerView;
 
   public Controls() {
     loadCSS("controls.css");
-    shuffleButton =
-        AdditionalFuncs.createSVGButton(
-            "M16.47 5.47a.75.75 0 0 0 0 1.06l.72.72h-3.813a1.75 1.75 0 0 0-1.575.987l-.21.434a.4.4"
-                + " 0 0 0 0 .35l.568 1.174a.2.2 0 0 0 .36 0l.632-1.304a.25.25 0 0 1"
-                + " .225-.141h3.812l-.72.72a.75.75 0 1 0 1.061 1.06l2-2a.75.75 0 0 0"
-                + " 0-1.06l-2-2a.75.75 0 0 0-1.06 0m-6.436 9.859a.4.4 0 0 0 0-.35l-.57-1.174a.2.2 0"
-                + " 0 0-.36 0l-.63 1.304a.25.25 0 0 1-.226.141H5a.75.75 0 0 0 0 1.5h3.248a1.75 1.75"
-                + " 0 0 0 1.575-.987z M16.47 18.53a.75.75 0 0 1 0-1.06l.72-.72h-3.813a1.75 1.75 0 0"
-                + " 1-1.575-.987L8.473 8.89a.25.25 0 0 0-.225-.141H5a.75.75 0 0 1 0-1.5h3.248c.671"
-                + " 0 1.283.383 1.575.987l3.329 6.872a.25.25 0 0 0 .225.141h3.812l-.72-.72a.75.75 0"
-                + " 1 1 1.061-1.06l2 2a.75.75 0 0 1 0 1.06l-2 2a.75.75 0 0 1-1.06 0");
     prevButton =
         AdditionalFuncs.createSVGButton(
             "M6.75 7a.75.75 0 0 0-1.5 0v10a.75.75 0 0 0 1.5 0zm3.102 5.66a.834.834 0 0 1 0-1.32a25"
@@ -49,9 +37,18 @@ public class Controls extends HBox implements Styleable {
                 + " 7.68a.944.944 0 0 1-1.243.772l-.466-.165a25 25 0 0 1-6.935-3.788");
     playButton =
         AdditionalFuncs.createSVGButton(
-            "M19.266 13.516a1.917 1.917 0 0 0 0-3.032A35.8 35.8 0 0 0 9.35"
-                + " 5.068l-.653-.232c-1.248-.443-2.567.401-2.736 1.69a42.5 42.5 0 0 0 0 10.948c.17"
-                + " 1.289 1.488 2.133 2.736 1.69l.653-.232a35.8 35.8 0 0 0 9.916-5.416");
+            "M3.33749 0.868183C3.34546 0.873497 3.35345 0.878828 3.36147 0.884175L10.394"
+                + " 5.5725C10.5974 5.70813 10.7861 5.83388 10.931 5.95074C11.0822 6.0727 11.2605"
+                + " 6.24182 11.3631 6.48922C11.4987 6.81622 11.4987 7.18373 11.3631 7.51074C11.2605"
+                + " 7.75814 11.0822 7.92726 10.931 8.04921C10.7861 8.16607 10.5975 8.29181 10.394"
+                + " 8.42743L3.33751 13.1318C3.08879 13.2976 2.86513 13.4467 2.67536 13.5496C2.48545"
+                + " 13.6525 2.22477 13.7701 1.92052 13.7519C1.53135 13.7287 1.17185 13.5363"
+                + " 0.936646 13.2254C0.752763 12.9823 0.706023 12.7002 0.686314 12.4851C0.66662"
+                + " 12.2701 0.666638 12.0013 0.666658 11.7024L0.666659 2.3264C0.666659 2.31676"
+                + " 0.666658 2.30715 0.666658 2.29757C0.666638 1.99864 0.66662 1.72984 0.686314"
+                + " 1.51489C0.706023 1.29979 0.752763 1.01765 0.936646 0.774581C1.17185 0.463662"
+                + " 1.53135 0.271262 1.92052 0.248025C2.22477 0.229859 2.48545 0.347467 2.67536"
+                + " 0.450386C2.86513 0.553231 3.08877 0.702349 3.33749 0.868183Z");
     pauseButton =
         AdditionalFuncs.createSVGButton(
             "M17.276 5.47c.435.16.724.575.724 1.039V17.49c0 .464-.29.879-.724 1.039a3.7 3.7 0 0"
@@ -77,31 +74,87 @@ public class Controls extends HBox implements Styleable {
                 + " 0 0-.211-.067c-.344-.092-.704-.092-1.425-.092c-2.017 0-3.025 0-3.789-.636a3 3 0"
                 + " 0 1-.419-.43c-.621-.79-.64-1.71-.678-3.552a14 14 0 0 1 0-.57");
 
-    volumeButton.setOnAction(
-        e -> {
-          VolumeDialog volumeDialog = new VolumeDialog();
-          // Create a new stage for the volume dialog
-          Stage volumeStage = new Stage();
-          volumeStage.initStyle(StageStyle.TRANSPARENT); // Make the stage transparent
-          volumeStage.setScene(
-              new Scene(volumeDialog, 300, 400)); // Set the scene with desired dimensions
-          volumeStage.setAlwaysOnTop(true); // Make the stage always on top
-          volumeButton.setDisable(true); // Disable the volume button
-          volumeStage.show(); // Show the dialog
-        });
+    timeSlider = new Slider(0, 100, 0);
+    timeSlider.setMaxHeight(50);
+    timeSlider.setOrientation(Orientation.HORIZONTAL);
+    timeSlider.setBlockIncrement(1);
+    timeSlider.setSnapToTicks(true);
+    timeSlider
+        .valueProperty()
+        .addListener(
+            (ObservableValue<? extends Number> ov, Number oldVal, Number newVal) -> {
+              timeSlider
+                  .lookup(".track")
+                  .setStyle(
+                      String.format(
+                          "-fx-background-color: linear-gradient(to right, rgb(255, 94, 0) %d%%, "
+                              + "#1B1B1B %d%%);",
+                          newVal.intValue(), newVal.intValue()));
+            });
+
+    SVGPath loopIcon = new SVGPath();
+    loopIcon.setContent(
+        "M15.0268 11H6.02679C4.35979 11 1.02679 10 1.02679 6C1.02679 2 4.35979 1 6.02679"
+            + " 1H14.0268C15.6938 1 19.0268 2 19.0268 6C19.0268 7.494 18.5618 8.57 17.8918 9.331\n"
+            + //
+            "M12.5268 8.5L15.0268 11L12.5268 13.5");
+    loopIcon.getStyleClass().add("loop-path");
+    loopButton = new Button();
+    loopButton.setGraphic(loopIcon);
+    loopButton.setAlignment(Pos.CENTER);
+    loopButton.setMinWidth(42);
+    loopButton.setMinHeight(42);
+    loopButton.getStyleClass().add("loop-button");
+
+    HBox volLoopWrapper = new HBox(42);
+    volLoopWrapper.getStyleClass().add("time-loop-wrapper");
+    volLoopWrapper.setPadding(new Insets(4));
+    volLoopWrapper.setPrefWidth(Region.USE_PREF_SIZE);
+    timeSlider.setMaxWidth(Double.MAX_VALUE);
+    HBox.setHgrow(timeSlider, Priority.ALWAYS);
+    volLoopWrapper.getChildren().addAll(timeSlider, loopButton);
+
+    VBox timingSliderWrapper = new VBox(10);
+    timerView = new TimerView();
+    timingSliderWrapper.getChildren().addAll(timerView, volLoopWrapper);
+
+    volumeSlider = new Slider(0, 100, 0);
+    volumeSlider.setMaxHeight(50);
+    volumeSlider.setOrientation(Orientation.HORIZONTAL);
+    volumeSlider.setBlockIncrement(1);
+    volumeSlider.setSnapToTicks(true);
+    volumeSlider
+        .valueProperty()
+        .addListener(
+            (ObservableValue<? extends Number> ov, Number oldVal, Number newVal) -> {
+              volumeSlider
+                  .lookup(".track")
+                  .setStyle(
+                      String.format(
+                          "-fx-background-color: linear-gradient(to right, rgb(255, 94, 0) %d%%, "
+                              + "#1B1B1B %d%%);",
+                          newVal.intValue(), newVal.intValue()));
+            });
+    HBox volumeWrapper = new HBox(12);
+    HBox.setHgrow(volumeWrapper, Priority.SOMETIMES);
+    volumeWrapper.getStyleClass().add("vol-wrapper");
+    volumeButton.getStyleClass().add("volButton");
+    volumeWrapper.getChildren().addAll(volumeSlider, volumeButton);
 
     musicPlayerControls = new HBox(8);
     musicPlayerControls.getStyleClass().add("music-player-controls");
     musicPlayerControls.setPadding(new Insets(12));
-    musicPlayerControls.setAlignment(Pos.CENTER);
+    musicPlayerControls.setAlignment(Pos.CENTER_LEFT);
     musicPlayerControls.setMinWidth(400);
     musicPlayerControls
         .getChildren()
-        .addAll(shuffleButton, prevButton, pauseButton, playButton, skipButton, volumeButton);
+        .addAll(prevButton, pauseButton, playButton, skipButton, volumeWrapper);
+    VBox controlWrapper = new VBox();
+    controlWrapper.getChildren().addAll(timingSliderWrapper, musicPlayerControls);
 
     this.setId("controls");
     this.setAlignment(Pos.CENTER);
-    this.getChildren().add(musicPlayerControls);
+    this.getChildren().add(controlWrapper);
   }
 
   @Override
@@ -109,82 +162,18 @@ public class Controls extends HBox implements Styleable {
     this.getStylesheets().add("file:" + this.getClass().getResource(stylesheet).getPath());
   }
 
-  class VolumeDialog extends Pane {
+  public TimerView getTimerView() {
+    return timerView;
+  }
 
-    public VolumeDialog() {
-      // Make dialog transparent
-      Pane dialogPane = new Pane();
-      dialogPane.getStylesheets().add("file:src/com/mp3player/style.css");
+  public void updateSliderMax(int duration) {
+    timeSlider.setMax(100);
+  }
 
-      // Set background transparent for dialog pane
-      dialogPane.setBackground(Background.fill(Color.web("#414141")));
-      dialogPane.setStyle(
-          "-fx-background-color: #2A2E37; -fx-border-color: #363b41; -fx-effect: dropshadow("
-              + " three-pass-box , rgba(0,0,0,1.6) , 5, 0.0 , 0 , 2 );");
-
-      // Make scene transparent
-      Scene scene = dialogPane.getScene();
-      if (scene != null) {
-        scene.setFill(null);
-      }
-
-      Slider volumeSlider = new Slider(0, 100, 20);
-      volumeSlider.setMaxHeight(50);
-      volumeSlider.setOrientation(Orientation.VERTICAL);
-      volumeSlider.setBlockIncrement(25);
-      volumeSlider.setSnapToTicks(true);
-      volumeSlider
-          .valueProperty()
-          .addListener(
-              (ObservableValue<? extends Number> ov, Number oldVal, Number newVal) -> {
-                volumeSlider
-                    .lookup(".track")
-                    .setStyle(
-                        String.format(
-                            "-fx-background-color: linear-gradient(to top, rgb(255, 94, 0) %d%%, "
-                                + "#e6e6e6 %d%%);",
-                            newVal.intValue(), newVal.intValue()));
-              });
-
-      VBox mainContainer = new VBox();
-      mainContainer.setStyle("-fx-background-color: black;".concat("-fx-background-radius: 12;"));
-      dialogPane.setStyle("-fx-background-color: -media-control-bg;".concat("-fx-padding: 0;"));
-      // Rounded Corners for root
-      mainContainer.minWidth(450);
-      mainContainer.setAlignment(Pos.CENTER);
-
-      dialogPane.setOnMousePressed(
-          e -> {
-            // allow move around of the dialog when pressed inside the dialog
-            dialogPane.setOnMouseDragged(
-                e2 -> {
-                  dialogPane.getScene().getWindow().setX(e2.getScreenX() - e.getSceneX());
-                  dialogPane.getScene().getWindow().setY(e2.getScreenY() - e.getSceneY());
-                });
-          });
-
-      // Create the first DropShadow effect
-      DropShadow shadow1 = new DropShadow();
-      shadow1.setColor(Color.rgb(0, 0, 0, 0.5));
-      shadow1.setRadius(24);
-      shadow1.setOffsetX(0);
-      shadow1.setOffsetY(4);
-
-      // Create the second DropShadow effect
-      DropShadow shadow2 = new DropShadow();
-      shadow2.setColor(Color.rgb(255, 255, 255, 0.5));
-      shadow2.setRadius(0);
-      shadow2.setOffsetX(0);
-      shadow2.setOffsetY(-1);
-
-      Blend blend = new Blend();
-      blend.setMode(BlendMode.SRC_OVER);
-      blend.setBottomInput(shadow1);
-      blend.setTopInput(shadow2);
-      dialogPane.setEffect(blend);
-
-      mainContainer.getChildren().add(volumeSlider);
-      dialogPane.getChildren().add(mainContainer);
+  public void updateSliderValue(int currentTime, int totalDuration) {
+    if (totalDuration > 0) {
+      double percentage = (double) currentTime / totalDuration * 100;
+      timeSlider.setValue(percentage);
     }
   }
 }

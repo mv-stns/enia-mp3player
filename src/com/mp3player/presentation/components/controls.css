@@ -1,5 +1,5 @@
 .music-player-controls {
-    -fx-background-color: -media-control-bg;
+    /* -fx-background-color: -media-control-bg; */
     -fx-background-radius: 12;
     -fx-border-radius: 12;
 }
