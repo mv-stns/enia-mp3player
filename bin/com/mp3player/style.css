@@ -5,13 +5,13 @@ or: color button text hover default
 
 
 .root {
-    -icon-color: rgba(50, 50, 50, 1);
+    -icon-color: white;
     -media-control-bg: rgba(50, 50, 50, 1);
-    -color-button-background-default: rgb(255, 255, 255);
-    -color-button-background-hover: rgb(207, 207, 207);
+    -color-button-background-default: #222222;
+    -color-button-background-hover: #333333;
     -color-button-background-pressed: rgb(136, 136, 136);
     -color-button-background-disabled: rgb(89, 89, 89);
-    -effects-button-background-default: innershadow(two-pass-box, rgba(255, 255, 255, 0.8), 4, 0, 0, 3);
+    -effects-button-background-default: innershadow(two-pass-box, #3D3D3D, 0, 1, 0, 1);
 }
 
 .button {
@@ -29,13 +29,9 @@ or: color button text hover default
 }
 
 .control-buttons {
-    -fx-background-color: linear-gradient(to bottom, -color-button-background-default, -color-button-background-hover);
+    -fx-background-color: -color-button-background-default;
     -fx-background-radius: 999em;
-    /* -fx-effect: -effects-button-background-default; */
-    -fx-border-width: 2px;
-    -fx-border-color: -media-control-bg;
-    -fx-border-radius: 999em;
-    -fx-border-insets: -2;
+    -fx-effect: -effects-button-background-default;
 }
 
 .control-buttons:hover {
@@ -54,21 +50,52 @@ or: color button text hover default
     -fx-fill: -icon-color;
 }
 
+.active-loop .loop-path {
+    -fx-fill: transparent;
+    -fx-stroke: #00dc00;
+    -fx-stroke-width: 1.5;
+    -fx-stroke-line-cap: round;
+    -fx-effect: shadow(two-pass-box, #00dc00, 0, 1, 0, 1);
+}
+.loop-path {
+    -fx-fill: transparent;
+    -fx-stroke: #636363;
+    -fx-stroke-width: 1.5;
+    -fx-stroke-line-cap: round;
+}
+
+.loop-button {
+    -fx-background-color: #171717;
+    -fx-background-radius: 12;
+}
+
+.time-loop-wrapper {
+    -fx-background-color: #222222;
+    -fx-background-radius: 16;
+    -fx-effect: innershadow(two-pass-box, #3D3D3D, 1, 0, 0, 1);
+}
+
+.vol-wrapper {
+    -fx-background-color: #222222;
+    -fx-background-radius: 16;
+    -fx-effect: innershadow(two-pass-box, #3D3D3D, 1, 0, 0, 1);
+}
+.vol-wrapper .volButton {
+    -fx-border-color: transparent;
+}
 
 /* SLIDER */
 .slider .track {
-    -fx-background-color: linear-gradient(to top, rgb(255, 94, 0) 20%, -color-button-background-hover 20%);
+    -fx-background-color: linear-gradient(to right, rgb(255, 94, 0) 1%, #1B1B1B 1%);
     -fx-background-insets: 0 0 -1 0, 0, 1;
     -fx-background-radius: 0.25em, 0.25em, 0.166667em;
     /* 3 3 2 */
     -fx-padding: 0.2em;
+    -fx-effect: innershadow(two-pass-box, #000000, -1, 0, 0, 1);
 }
 
 .slider .thumb {
-    -fx-background-color: linear-gradient(to bottom, -color-button-background-default, -color-button-background-hover);
-    -fx-border-style: solid;
-    -fx-border-width: 2px;
-    -fx-border-color: -media-control-bg;
+    -fx-background-color: white;
     -fx-border-radius: 999em;
     -fx-border-insets: -2;
     /* inward subtle shadow */
@@ -99,10 +126,29 @@ or: color button text hover default
     -fx-background-size: contain;
     -fx-background-repeat: repeat;
     -fx-background-color: #141414;
-    
+
     /* BORDER SETTINGS */
     -fx-border-style: solid;
     -fx-border-width: 0.5;
     -fx-border-color: #292929;
     /* -fx-border-color: linear-gradient(to bottom, white 0%, black 100%); */
+}
+
+/* SONG INFO */
+/*  Unglücklicherweise funktionieren die Imports nicht und
+    ebenfalls funktionieren die System Fonts nicht richtig
+    da bestimme Ligaturen, Font Style o.Ä. leider nicht direkt
+    aus dem System unterstützt werden. */
+
+/* @font-face {
+    font-family: 'SF Pro Rounded Regular';
+    src: url('../resources/fonts/SF-Pro-Rounded-Regular.otf');
+}
+@font-face {
+    font-family: "SF Pro Rounded Semibold";
+    src: url("resources/fonts/SF-Pro-Rounded-Semibold.otf");
+} */
+
+.song-title {
+    -fx-fill: white;
 }
