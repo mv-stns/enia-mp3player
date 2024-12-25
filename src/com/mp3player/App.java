@@ -66,6 +66,7 @@ public class App extends Application {
     StackPane.setAlignment(trafficLight, Pos.TOP_LEFT);
     trafficLight.setTranslateX(40);
     trafficLight.setTranslateY(40);
+    trafficLight.setVisible(false);
     StackPane.setAlignment(resizeGrabber, Pos.BOTTOM_RIGHT);
     resizeGrabber.setTranslateX(-25);
     resizeGrabber.setTranslateY(-25);
@@ -274,10 +275,23 @@ public class App extends Application {
                   + " 8.91586 3.64458 8.91586 4.02595L8.91586 7.57565C8.91586 8.0964 8.49371"
                   + " 8.51855 7.97296 8.51855ZM7.03005 6.63274L7.03005 6.30233L6.69963"
                   + " 6.63274L7.03005 6.63274Z");
-      setupButtonActions(closeButton, xIcon, () -> Platform.exit());
-      setupButtonActions(minimizeButton, minusIcon, () -> mainStage.setIconified(true));
-      setupButtonActions(
-          maximizeButton, resizeIcon, () -> mainStage.setMaximized(!mainStage.isMaximized()));
+      setupButtonActions(closeButton, xIcon);
+      closeButton.setOnMouseClicked(
+          event -> {
+            System.out.println("Close button clicked");
+            Platform.exit();
+            System.exit(0);
+          });
+      setupButtonActions(minimizeButton, minusIcon);
+      minimizeButton.setOnMouseClicked(
+          event -> {
+            mainStage.setIconified(true);
+          });
+      setupButtonActions(maximizeButton, resizeIcon);
+      maximizeButton.setOnMouseClicked(
+          event -> {
+            mainStage.setMaximized(!mainStage.isMaximized());
+          });
 
       getChildren()
           .addAll(closeButton, xIcon, minimizeButton, minusIcon, maximizeButton, resizeIcon);
@@ -315,10 +329,9 @@ public class App extends Application {
       icon.setMouseTransparent(true);
     }
 
-    private void setupButtonActions(Circle button, Group icon, Runnable action) {
+    private void setupButtonActions(Circle button, Group icon) {
       button.setOnMouseEntered(event -> icon.setVisible(true));
       button.setOnMouseExited(event -> icon.setVisible(false));
-      button.setOnMouseClicked(event -> action.run());
     }
   }
 
@@ -350,7 +363,6 @@ public class App extends Application {
 
       setOnMousePressed(
           (MouseEvent event) -> {
-            // Resize logic for bottom corners
             if (event.getSceneX() >= getLayoutX() && event.getSceneY() >= getLayoutY()) {
               setOnMouseDragged(
                   (MouseEvent event1) -> {
@@ -359,11 +371,6 @@ public class App extends Application {
                   });
             }
           });
-      // make border red for debugging
-      this.setStyle(
-          "-fx-border-color: red;"
-              .concat("-fx-border-width: 1;".concat("-fx-border-style: solid;"))
-              .concat("-fx-background-color: transparent;"));
       this.setStyle("-fx-cursor: se-resize;");
     }
   }

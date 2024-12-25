@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class TimerView extends HBox {
-  public Label currentTimeLabel, songLenght;
+  public Label currentTimeLabel, songLength;
   private SimpleIntegerProperty time;
   private NumberFormat timeFormat;
 
@@ -26,15 +26,15 @@ public class TimerView extends HBox {
     currentTimeLabel.setFont(Font.loadFont("file:src/resources/fonts/SF-Pro-Rounded-Semibold.otf", 16));
     currentTimeLabel.setTextFill(Color.WHITE);
 
-    songLenght = new Label("00:00");
-    songLenght.setFont(Font.loadFont("file:src/resources/fonts/SF-Pro-Rounded-Semibold.otf", 16));
-    songLenght.setTextFill(Color.rgb(107, 107, 107));
+    songLength = new Label("00:00");
+    songLength.setFont(Font.loadFont("file:src/resources/fonts/SF-Pro-Rounded-Semibold.otf", 16));
+    songLength.setTextFill(Color.rgb(107, 107, 107));
 
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
     this.setWidth(Region.USE_COMPUTED_SIZE);
-    this.getChildren().addAll(currentTimeLabel, spacer, songLenght);
+    this.getChildren().addAll(currentTimeLabel, spacer, songLength);
 
     timeFormat =
         new NumberFormat() {

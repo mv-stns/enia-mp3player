@@ -24,4 +24,7 @@
     "css.lint.vendorPrefix": "ignore",
     "editor.defaultFormatter": "josevseb.google-java-format-for-vs-code",
     "git.ignoreLimitWarning": true,
+    "[snippets]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }

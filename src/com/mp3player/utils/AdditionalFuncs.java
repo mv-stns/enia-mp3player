@@ -15,8 +15,6 @@ public class AdditionalFuncs {
         path.setContent(svgPath);
         path.getStyleClass().add("control-icons");
 
-        // path.setScaleX(1);
-        // path.setScaleY(1);
         path.maxWidth(10);
 
         Button button = new Button();
@@ -27,6 +25,21 @@ public class AdditionalFuncs {
         button.setMinWidth(42);
         button.setMinHeight(42);
 
+        return button;
+    }
+
+    public static Button replaceSVG(Button b, String p) {
+        SVGPath newPath = new SVGPath();
+        newPath.setContent(p);
+        newPath.maxWidth(10);
+        
+        Button button = new Button();
+        button.setGraphic(newPath);
+        button.setAlignment(Pos.CENTER);
+        button.setPadding(new Insets(0));
+        button.getStyleClass().addAll("control-buttons");
+        button.setMinWidth(42);
+        button.setMinHeight(42);
         return button;
     }
     public static void loadCSS(Parent e, String s) {

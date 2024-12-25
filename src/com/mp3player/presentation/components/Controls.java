@@ -3,6 +3,7 @@ package com.mp3player.presentation.components;
 import static com.mp3player.utils.Constants.*;
 
 import com.mp3player.utils.AdditionalFuncs;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -21,12 +22,31 @@ public class Controls extends HBox implements Styleable {
   public Button skipButton;
   public Button prevButton;
   public Button playButton;
-  public Button pauseButton;
+  public Button playPauseButton;
   public Button volumeButton;
   public Button loopButton;
   public Slider timeSlider;
   public Slider volumeSlider;
   public TimerView timerView;
+  public String playButtonPath =
+      "M3.33749 0.868183C3.34546 0.873497 3.35345 0.878828 3.36147 0.884175L10.394"
+          + " 5.5725C10.5974 5.70813 10.7861 5.83388 10.931 5.95074C11.0822 6.0727 11.2605"
+          + " 6.24182 11.3631 6.48922C11.4987 6.81622 11.4987 7.18373 11.3631 7.51074C11.2605"
+          + " 7.75814 11.0822 7.92726 10.931 8.04921C10.7861 8.16607 10.5975 8.29181 10.394"
+          + " 8.42743L3.33751 13.1318C3.08879 13.2976 2.86513 13.4467 2.67536 13.5496C2.48545"
+          + " 13.6525 2.22477 13.7701 1.92052 13.7519C1.53135 13.7287 1.17185 13.5363"
+          + " 0.936646 13.2254C0.752763 12.9823 0.706023 12.7002 0.686314 12.4851C0.66662"
+          + " 12.2701 0.666638 12.0013 0.666658 11.7024L0.666659 2.3264C0.666659 2.31676"
+          + " 0.666658 2.30715 0.666658 2.29757C0.666638 1.99864 0.66662 1.72984 0.686314"
+          + " 1.51489C0.706023 1.29979 0.752763 1.01765 0.936646 0.774581C1.17185 0.463662"
+          + " 1.53135 0.271262 1.92052 0.248025C2.22477 0.229859 2.48545 0.347467 2.67536"
+          + " 0.450386C2.86513 0.553231 3.08877 0.702349 3.33749 0.868183Z";
+  public String pauseButtonPath =
+      "M17.276 5.47c.435.16.724.575.724 1.039V17.49c0 .464-.29.879-.724 1.039a3.7 3.7 0 0"
+          + " 1-2.552 0A1.11 1.11 0 0 1 14 17.491V6.51c0-.464.29-.879.724-1.04a3.7 3.7 0 0 1"
+          + " 2.552 0m-8 0c.435.16.724.575.724 1.039V17.49c0 .464-.29.879-.724 1.039a3.7 3.7"
+          + " 0 0 1-2.552 0A1.11 1.11 0 0 1 6 17.491V6.51c0-.464.29-.879.724-1.04a3.7 3.7 0 0"
+          + " 1 2.552 0";
 
   public Controls() {
     loadCSS("controls.css");
@@ -35,27 +55,7 @@ public class Controls extends HBox implements Styleable {
             "M6.75 7a.75.75 0 0 0-1.5 0v10a.75.75 0 0 0 1.5 0zm3.102 5.66a.834.834 0 0 1 0-1.32a25"
                 + " 25 0 0 1 6.935-3.787l.466-.165a.944.944 0 0 1 1.243.772a29.8 29.8 0 0 1 0"
                 + " 7.68a.944.944 0 0 1-1.243.772l-.466-.165a25 25 0 0 1-6.935-3.788");
-    playButton =
-        AdditionalFuncs.createSVGButton(
-            "M3.33749 0.868183C3.34546 0.873497 3.35345 0.878828 3.36147 0.884175L10.394"
-                + " 5.5725C10.5974 5.70813 10.7861 5.83388 10.931 5.95074C11.0822 6.0727 11.2605"
-                + " 6.24182 11.3631 6.48922C11.4987 6.81622 11.4987 7.18373 11.3631 7.51074C11.2605"
-                + " 7.75814 11.0822 7.92726 10.931 8.04921C10.7861 8.16607 10.5975 8.29181 10.394"
-                + " 8.42743L3.33751 13.1318C3.08879 13.2976 2.86513 13.4467 2.67536 13.5496C2.48545"
-                + " 13.6525 2.22477 13.7701 1.92052 13.7519C1.53135 13.7287 1.17185 13.5363"
-                + " 0.936646 13.2254C0.752763 12.9823 0.706023 12.7002 0.686314 12.4851C0.66662"
-                + " 12.2701 0.666638 12.0013 0.666658 11.7024L0.666659 2.3264C0.666659 2.31676"
-                + " 0.666658 2.30715 0.666658 2.29757C0.666638 1.99864 0.66662 1.72984 0.686314"
-                + " 1.51489C0.706023 1.29979 0.752763 1.01765 0.936646 0.774581C1.17185 0.463662"
-                + " 1.53135 0.271262 1.92052 0.248025C2.22477 0.229859 2.48545 0.347467 2.67536"
-                + " 0.450386C2.86513 0.553231 3.08877 0.702349 3.33749 0.868183Z");
-    pauseButton =
-        AdditionalFuncs.createSVGButton(
-            "M17.276 5.47c.435.16.724.575.724 1.039V17.49c0 .464-.29.879-.724 1.039a3.7 3.7 0 0"
-                + " 1-2.552 0A1.11 1.11 0 0 1 14 17.491V6.51c0-.464.29-.879.724-1.04a3.7 3.7 0 0 1"
-                + " 2.552 0m-8 0c.435.16.724.575.724 1.039V17.49c0 .464-.29.879-.724 1.039a3.7 3.7"
-                + " 0 0 1-2.552 0A1.11 1.11 0 0 1 6 17.491V6.51c0-.464.29-.879.724-1.04a3.7 3.7 0 0"
-                + " 1 2.552 0");
+    playPauseButton = AdditionalFuncs.createSVGButton(playButtonPath);
     skipButton =
         AdditionalFuncs.createSVGButton(
             "M18.75 7a.75.75 0 0 0-1.5 0v10a.75.75 0 0 0 1.5 0zm-4.296 3.945c.69.534.69 1.576 0"
@@ -96,8 +96,7 @@ public class Controls extends HBox implements Styleable {
     loopIcon.setContent(
         "M15.0268 11H6.02679C4.35979 11 1.02679 10 1.02679 6C1.02679 2 4.35979 1 6.02679"
             + " 1H14.0268C15.6938 1 19.0268 2 19.0268 6C19.0268 7.494 18.5618 8.57 17.8918 9.331\n"
-            + //
-            "M12.5268 8.5L15.0268 11L12.5268 13.5");
+            + "M12.5268 8.5L15.0268 11L12.5268 13.5");
     loopIcon.getStyleClass().add("loop-path");
     loopButton = new Button();
     loopButton.setGraphic(loopIcon);
@@ -118,7 +117,7 @@ public class Controls extends HBox implements Styleable {
     timerView = new TimerView();
     timingSliderWrapper.getChildren().addAll(timerView, volLoopWrapper);
 
-    volumeSlider = new Slider(0, 100, 0);
+    volumeSlider = new Slider(0, 100, 50);
     volumeSlider.setMaxHeight(50);
     volumeSlider.setOrientation(Orientation.HORIZONTAL);
     volumeSlider.setBlockIncrement(1);
@@ -135,6 +134,14 @@ public class Controls extends HBox implements Styleable {
                               + "#1B1B1B %d%%);",
                           newVal.intValue(), newVal.intValue()));
             });
+    Platform.runLater(
+        () -> {
+          volumeSlider
+              .lookup(".track")
+              .setStyle(
+                  "-fx-background-color: linear-gradient(to right, rgb(255, 94, 0) 50%, #1B1B1B"
+                      + " 50%);");
+        });
     HBox volumeWrapper = new HBox(12);
     HBox.setHgrow(volumeWrapper, Priority.SOMETIMES);
     volumeWrapper.getStyleClass().add("vol-wrapper");
@@ -148,7 +155,7 @@ public class Controls extends HBox implements Styleable {
     musicPlayerControls.setMinWidth(400);
     musicPlayerControls
         .getChildren()
-        .addAll(prevButton, pauseButton, playButton, skipButton, volumeWrapper);
+        .addAll(prevButton, playPauseButton, skipButton, volumeWrapper);
     VBox controlWrapper = new VBox();
     controlWrapper.getChildren().addAll(timingSliderWrapper, musicPlayerControls);
 

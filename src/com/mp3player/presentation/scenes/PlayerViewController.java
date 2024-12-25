@@ -1,8 +1,11 @@
 package com.mp3player.presentation.scenes;
 
+import static com.mp3player.utils.Constants.*;
+
 import com.mp3player.business.MP3Player;
 import com.mp3player.presentation.Controller;
 import com.mp3player.presentation.components.TimerView;
+import com.mp3player.utils.AdditionalFuncs;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,7 +23,7 @@ public class PlayerViewController extends Controller<PlayerView> {
   Button skipButton;
   Button prevButton;
   Button playButton;
-  Button pauseButton;
+  Button playPauseButton;
   Button volumeButton;
   Button loopButton;
 
@@ -32,13 +35,13 @@ public class PlayerViewController extends Controller<PlayerView> {
   Slider volumeSlider;
   TimerView timerView;
   Label timerSongDurationLabel, currentLengthLabel;
+  float lastVol;
 
   public PlayerViewController(MP3Player player) {
     this.player = player;
     root = new PlayerView();
 
-    playButton = root.controls.playButton;
-    pauseButton = root.controls.pauseButton;
+    playPauseButton = root.controls.playPauseButton;
     skipButton = root.controls.skipButton;
     prevButton = root.controls.prevButton;
     volumeButton = root.controls.volumeButton;
@@ -51,9 +54,9 @@ public class PlayerViewController extends Controller<PlayerView> {
 
     timeSlider = root.controls.timeSlider;
     timerView = root.controls.timerView;
-    timerSongDurationLabel = root.controls.timerView.songLenght;
+    timerSongDurationLabel = root.controls.timerView.songLength;
     currentLengthLabel = root.controls.timerView.currentTimeLabel;
-    
+
     volumeSlider = root.controls.volumeSlider;
 
     initialize();
@@ -61,29 +64,82 @@ public class PlayerViewController extends Controller<PlayerView> {
 
   private void initialize() {
     root.controls.getTimerView().timeProperty().bindBidirectional(timeSlider.valueProperty());
+    root.controls.volumeSlider.valueProperty().bindBidirectional(player.currentVolumeProperty());
 
-    playButton.addEventHandler(
+    volumeButton.addEventHandler(
         ActionEvent.ACTION,
         event -> {
-          player.play();
-          updateSongDuration();
+          if (player.isMuted()) {
+            player.setVolume(lastVol);
+            player.setMuted(false);
+          } else {
+            player.setVolume(lastVol);
+            player.mute();
+          }
         });
-    pauseButton.addEventHandler(
+
+    playPauseButton.addEventHandler(
         ActionEvent.ACTION,
         event -> {
-          player.pause();
+          if (!player.isSongPlaying() && !player.isAudioPlayerInitialized()) {
+            player.play();
+            return;
+          }
+          if (player.isSongPlaying() && !player.isPaused()) {
+            Task<Void> pauseTask =
+                new Task<Void>() {
+                  @Override
+                  protected Void call() throws Exception {
+                    AdditionalFuncs.replaceSVG(playPauseButton, root.controls.pauseButtonPath);
+                    player.pause();
+                    return null;
+                  }
+                };
+            new Thread(pauseTask).start();
+          } else {
+            AdditionalFuncs.replaceSVG(playPauseButton, root.controls.playButtonPath);
+            Task<Void> resumeTask =
+                new Task<Void>() {
+                  @Override
+                  protected Void call() throws Exception {
+                    player.resume();
+                    updateSongDuration();
+                    return null;
+                  }
+                };
+            new Thread(resumeTask).start();
+          }
+          System.out.println(
+              String.format(
+                  "PLAYING: %s\t PAUSED: %s\t", player.isSongPlaying(), player.isPaused()));
         });
     skipButton.addEventHandler(
         ActionEvent.ACTION,
         event -> {
-          player.next();
-          updateSongDuration();
+          Task<Void> nextTask =
+              new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                  player.next();
+                  updateSongDuration();
+                  return null;
+                }
+              };
+          new Thread(nextTask).start();
         });
     prevButton.addEventHandler(
         ActionEvent.ACTION,
         event -> {
-          player.previous();
-          updateSongDuration();
+          Task<Void> prevTask =
+              new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                  player.previous();
+                  updateSongDuration();
+                  return null;
+                }
+              };
+          new Thread(prevTask).start();
         });
     loopButton.addEventHandler(
         ActionEvent.ACTION,
@@ -96,6 +152,8 @@ public class PlayerViewController extends Controller<PlayerView> {
     album.textProperty().set(player.currentTrackProperty().get().getAlbum());
     artist.textProperty().set(player.currentTrackProperty().get().getArtist());
     albumCover.setImage(player.currentTrackProperty().get().getCover());
+
+    volumeSlider.valueProperty().set(player.currentVolumeProperty().doubleValue());
 
     player
         .currentTrackProperty()
@@ -139,12 +197,25 @@ public class PlayerViewController extends Controller<PlayerView> {
                     });
               }
             });
-
+    root.controls.volumeSlider.setOnMouseDragged(
+        event -> {
+          Task<Void> volumeTask =
+              new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                  player.setMuted(false);
+                  player.setVolume((float) (root.controls.volumeSlider.getValue()));
+                  lastVol = (float) root.controls.volumeSlider.getValue();
+                  return null;
+                }
+              };
+          new Thread(volumeTask).start();
+        });
     root.controls.timeSlider.setOnMouseReleased(
         event -> {
           int totalDuration = player.getCurrentSongDuration();
           int newTime = (int) ((root.controls.timeSlider.getValue() / 100) * totalDuration);
-          Task<Void> t =
+          Task<Void> scrubTask =
               new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
@@ -152,7 +223,7 @@ public class PlayerViewController extends Controller<PlayerView> {
                   return null;
                 }
               };
-          new Thread(t).start();
+          new Thread(scrubTask).start();
         });
   }
 

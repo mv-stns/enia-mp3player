@@ -86,10 +86,9 @@ or: color button text hover default
 
 /* SLIDER */
 .slider .track {
-    -fx-background-color: linear-gradient(to right, rgb(255, 94, 0) 1%, #1B1B1B 1%);
+    /* -fx-background-color: linear-gradient(to right, rgb(255, 94, 0) 1%, #1B1B1B 1%); */
     -fx-background-insets: 0 0 -1 0, 0, 1;
     -fx-background-radius: 0.25em, 0.25em, 0.166667em;
-    /* 3 3 2 */
     -fx-padding: 0.2em;
     -fx-effect: innershadow(two-pass-box, #000000, -1, 0, 0, 1);
 }
