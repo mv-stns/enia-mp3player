@@ -27,21 +27,7 @@ public class AdditionalFuncs {
 
         return button;
     }
-
-    public static Button replaceSVG(Button b, String p) {
-        SVGPath newPath = new SVGPath();
-        newPath.setContent(p);
-        newPath.maxWidth(10);
-        
-        Button button = new Button();
-        button.setGraphic(newPath);
-        button.setAlignment(Pos.CENTER);
-        button.setPadding(new Insets(0));
-        button.getStyleClass().addAll("control-buttons");
-        button.setMinWidth(42);
-        button.setMinHeight(42);
-        return button;
-    }
+    
     public static void loadCSS(Parent e, String s) {
         e.getStylesheets().add("file:" + e.getClass().getResource(s).getPath());
     }

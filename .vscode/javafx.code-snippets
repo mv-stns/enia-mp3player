@@ -30,10 +30,15 @@
         "prefix": "eh",
         "body": [
             "$1.addEventHandler(ActionEvent.$2,",
-			"\tevent -> {",
+            "\tevent -> {",
             "\t\t$3",
             "\t});",
         ],
+        "description": "Creates an JavaFX Event Handler",
+    },
+    "synchronized": {
+        "prefix": "sync",
+        "body": ["synchronized ($1) {", "\t$2", "}"],
         "description": "Creates an JavaFX Event Handler",
     },
 }

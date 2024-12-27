@@ -5,17 +5,19 @@ import static com.mp3player.utils.Constants.*;
 import com.mp3player.business.MP3Player;
 import com.mp3player.presentation.Controller;
 import com.mp3player.presentation.components.TimerView;
-import com.mp3player.utils.AdditionalFuncs;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 
 public class PlayerViewController extends Controller<PlayerView> {
@@ -63,8 +65,8 @@ public class PlayerViewController extends Controller<PlayerView> {
   }
 
   private void initialize() {
-    root.controls.getTimerView().timeProperty().bindBidirectional(timeSlider.valueProperty());
-    root.controls.volumeSlider.valueProperty().bindBidirectional(player.currentVolumeProperty());
+    timerView.timeProperty().bindBidirectional(timeSlider.valueProperty());
+    volumeSlider.valueProperty().bindBidirectional(player.currentVolumeProperty());
 
     volumeButton.addEventHandler(
         ActionEvent.ACTION,
@@ -90,14 +92,14 @@ public class PlayerViewController extends Controller<PlayerView> {
                 new Task<Void>() {
                   @Override
                   protected Void call() throws Exception {
-                    AdditionalFuncs.replaceSVG(playPauseButton, root.controls.pauseButtonPath);
+                    replaceSVG(playPauseButton, root.controls.pauseButtonPath);
                     player.pause();
                     return null;
                   }
                 };
             new Thread(pauseTask).start();
           } else {
-            AdditionalFuncs.replaceSVG(playPauseButton, root.controls.playButtonPath);
+            replaceSVG(playPauseButton, root.controls.playButtonPath);
             Task<Void> resumeTask =
                 new Task<Void>() {
                   @Override
@@ -148,12 +150,14 @@ public class PlayerViewController extends Controller<PlayerView> {
           updateLoopButtonStyle();
         });
 
-    title.textProperty().set(player.currentTrackProperty().get().getTitle());
-    album.textProperty().set(player.currentTrackProperty().get().getAlbum());
-    artist.textProperty().set(player.currentTrackProperty().get().getArtist());
-    albumCover.setImage(player.currentTrackProperty().get().getCover());
-
-    volumeSlider.valueProperty().set(player.currentVolumeProperty().doubleValue());
+    Platform.runLater(
+        () -> {
+          title.textProperty().set(player.currentTrackProperty().get().getTitle());
+          album.textProperty().set(player.currentTrackProperty().get().getAlbum());
+          artist.textProperty().set(player.currentTrackProperty().get().getArtist());
+          albumCover.setImage(player.currentTrackProperty().get().getCover());
+          volumeSlider.valueProperty().set(player.currentVolumeProperty().doubleValue());
+        });
 
     player
         .currentTrackProperty()
@@ -197,33 +201,25 @@ public class PlayerViewController extends Controller<PlayerView> {
                     });
               }
             });
-    root.controls.volumeSlider.setOnMouseDragged(
+    volumeSlider.setOnMouseDragged(
         event -> {
-          Task<Void> volumeTask =
-              new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                  player.setMuted(false);
-                  player.setVolume((float) (root.controls.volumeSlider.getValue()));
-                  lastVol = (float) root.controls.volumeSlider.getValue();
-                  return null;
-                }
-              };
-          new Thread(volumeTask).start();
+          player.setMuted(false);
+          player.setVolume((float) (volumeSlider.getValue()));
+          lastVol = (float) volumeSlider.getValue();
         });
-    root.controls.timeSlider.setOnMouseReleased(
+    timeSlider.setOnMouseDragEntered(
+        event -> {
+          player.pause();
+        });
+    timeSlider.setOnMouseDragged(
         event -> {
           int totalDuration = player.getCurrentSongDuration();
-          int newTime = (int) ((root.controls.timeSlider.getValue() / 100) * totalDuration);
-          Task<Void> scrubTask =
-              new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                  player.moveTo(newTime);
-                  return null;
-                }
-              };
-          new Thread(scrubTask).start();
+          int newTime = (int) ((timeSlider.getValue() / 100) * totalDuration);
+          player.moveTo(newTime);
+        });
+    timeSlider.setOnMouseDragExited(
+        event -> {
+          player.play();
         });
   }
 
@@ -247,5 +243,23 @@ public class PlayerViewController extends Controller<PlayerView> {
     } else {
       loopButton.getStyleClass().remove("active-loop");
     }
+  }
+
+  private Button replaceSVG(Button b, String p) {
+    SVGPath newPath = new SVGPath();
+    Button button = new Button();
+    Platform.runLater(
+        () -> {
+          newPath.setContent(p);
+          newPath.maxWidth(10);
+
+          button.setGraphic(newPath);
+          button.setAlignment(Pos.CENTER);
+          button.setPadding(new Insets(0));
+          button.getStyleClass().addAll("control-buttons");
+          button.setMinWidth(42);
+          button.setMinHeight(42);
+        });
+    return button;
   }
 }
