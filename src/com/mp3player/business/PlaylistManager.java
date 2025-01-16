@@ -12,6 +12,15 @@ public class PlaylistManager {
     return tracks;
   }
 
+  public Track getTrack(Track t) {
+    for (Track track : tracks) {
+      if (track.equals(t)) {
+        return track;
+      }
+    }
+    return null;
+  }
+
   public PlaylistManager() {
     initSongFiles();
   }
@@ -43,11 +52,17 @@ public class PlaylistManager {
     }
 
     StringBuilder playlistString = new StringBuilder();
-    System.out.println(String.format("%s\t%-45s%-50s%-30s\n", "Number", "Artist", "Title", "Album"));
+    System.out.println(
+        String.format("%s\t%-45s%-50s%-30s\n", "Number", "Artist", "Title", "Album"));
     for (int i = 0; i < tracks.length; i++) {
       Track track = tracks[i];
-      String truncatedString = track.getTitle().length() > 45 ? track.getTitle().substring(0, 45) + "..." : track.getTitle();
-      playlistString.append(String.format("[%s]\t%-45s%-50s%-30s\n", i, track.getArtist(), truncatedString, track.getAlbum()));
+      String truncatedString =
+          track.getTitle().length() > 45
+              ? track.getTitle().substring(0, 45) + "..."
+              : track.getTitle();
+      playlistString.append(
+          String.format(
+              "[%s]\t%-45s%-50s%-30s\n", i, track.getArtist(), truncatedString, track.getAlbum()));
     }
     return playlistString.toString().trim();
   }

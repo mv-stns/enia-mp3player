@@ -6,10 +6,11 @@ import de.hsrm.mi.eibo.simpleplayer.*;
 import de.hsrm.mi.prog.util.StaticScanner;
 import de.vaitschulis.utils.Formatting;
 import java.util.Arrays;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.concurrent.Task;
 
 /**
  * A class that implements an MP3 player with basic audio playback functionality. This player
@@ -24,22 +25,27 @@ public class MP3Player {
   private SimpleAudioPlayer audioPlayer;
   private boolean muted;
   private boolean looping;
-  private Track currentSong;
-  private boolean paused;
+  private SimpleBooleanProperty pausedProperty;
   private PlaylistManager songFileManager;
   private float volume;
   private SimpleIntegerProperty currentTimeProperty;
   private SimpleObjectProperty<Track> currentTrackProperty;
   private SimpleFloatProperty currentVolumeProperty;
-  public Thread songTimeThread;
+  private Object skipObject;
+  private Thread timeUpdaterThread;
+  private boolean timeUpdaterRunning = true;
 
   /**
    * Checks if the current track is paused.
    *
    * @return true if the player is in paused state, false otherwise
    */
-  public boolean isPaused() {
-    return paused;
+  public synchronized boolean isPaused() {
+    return pausedProperty.get();
+  }
+
+  public SimpleBooleanProperty getPausedProperty() {
+    return pausedProperty;
   }
 
   public boolean isMuted() {
@@ -52,7 +58,7 @@ public class MP3Player {
    * @param paused the pause state to set
    */
   public void setPaused(boolean paused) {
-    this.paused = paused;
+    this.pausedProperty.set(paused);
   }
 
   /**
@@ -71,10 +77,12 @@ public class MP3Player {
   /**
    * Sets the current track.
    *
-   * @param currentSong Track object to set as current song
+   * @param newSong Track object to set as current song
    */
-  public void setCurrentSong(Track currentSong) {
-    currentTrackProperty.set(currentSong);
+  public void setCurrentSong(Track newSong) {
+    debug("CHANGING SONG").redBackground();
+    currentTrackProperty.set(newSong);
+    audioPlayer = minim.loadMP3File(newSong.getSoundFilePath());
   }
 
   /**
@@ -95,6 +103,7 @@ public class MP3Player {
    * default values for volume and playback states.
    */
   public MP3Player() {
+    skipObject = new Object();
     minim = new SimpleMinim();
     loadSoundFiles();
     muted = false;
@@ -103,34 +112,77 @@ public class MP3Player {
     currentTimeProperty = new SimpleIntegerProperty();
     currentTrackProperty = new SimpleObjectProperty<>();
     currentVolumeProperty = new SimpleFloatProperty(50.0f);
+    pausedProperty = new SimpleBooleanProperty(true);
     setCurrentSong(songFileManager.getTracks()[0]);
     startSongTimeUpdater();
+    debug(String.format("PLAYING: %s\t PAUSED: %s\t", isSongPlaying(), isPaused())).redBackground();
   }
 
   private void startSongTimeUpdater() {
-    songTimeThread =
-        new Thread(
-            () -> {
-              try {
-                while (true) {
-                  if (isAudioPlayerInitialized() || isSongPlaying()) {
-                    long currentPosition = audioPlayer.position();
-                    currentTimeProperty.set((int) (currentPosition / 1000));
-                    if (currentPosition >= audioPlayer.length() && looping) {
-                      rewindAndPlay();
-                    } else if (currentPosition >= audioPlayer.length()) {
-                      next();
+    if (timeUpdaterThread == null || !timeUpdaterThread.isAlive()) {
+      timeUpdaterRunning = true;
+      timeUpdaterThread =
+          new Thread(
+              () -> {
+                while (timeUpdaterRunning) {
+                  if (isAudioPlayerInitialized()) {
+                    int currentPosition = audioPlayer.position();
+                    int totalDuration = audioPlayer.length();
+
+                    if (currentPosition >= totalDuration - 200) {
+                      if (!looping) {
+                        setPaused(true);
+                        // currentTimeProperty.set(totalDuration);
+                        try {
+                          Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                          e.printStackTrace();
+                        }
+                        new Thread() {
+                          public void run() {
+                            skip();
+                          }
+                        }.start();
+                      } else if (looping) {
+                        rewindAndPlay();
+                      }
+                    }
+                    currentTimeProperty.set(currentPosition);
+
+                    // debug(
+                    //         String.format(
+                    //             "C: %s\tL: %s\tISPLAYING?: %s",
+                    //             currentTimeProperty.get(),
+                    //             getCurrentSongDuration(),
+                    //             audioPlayer.isPlaying()))
+                    //     .red();
+
+                    try {
+                      Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                      debug("INTERRUPTING");
+                      Thread.currentThread().interrupt();
+                      return;
                     }
                   }
-                  Thread.sleep(100);
                 }
-              } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Reset interrupt status
-              }
-            });
+              });
+      timeUpdaterThread.setDaemon(true);
+      timeUpdaterThread.start();
+    }
+  }
 
-    songTimeThread.setDaemon(true);
-    songTimeThread.start();
+  // Add a method to stop the thread
+  public void stopTimeUpdater() {
+    timeUpdaterRunning = false;
+    if (timeUpdaterThread != null) {
+      timeUpdaterThread.interrupt();
+    }
+  }
+
+  // Add a method to check thread status
+  public boolean isTimeUpdaterRunning() {
+    return timeUpdaterThread != null && timeUpdaterThread.isAlive();
   }
 
   /**
@@ -208,7 +260,7 @@ public class MP3Player {
    * @param vol volume level as percentage (0-100)
    */
   public void setVolume(float vol) {
-    System.out.println(vol);
+    // System.out.println(vol);
     this.volume = vol;
     currentVolumeProperty.set(vol);
     debug(Formatting.RED_BOLD + "CURRENT VOL IS:" + volume + Formatting.RESET);
@@ -219,14 +271,14 @@ public class MP3Player {
       }
       float gainDB = normalizeAudioPercentage(vol);
       audioPlayer.setGain(gainDB);
-      System.out.println(
-          Formatting.BLUE_BOLD
-              + "Volume set to "
-              + vol
-              + "% ("
-              + String.format("%.2f", gainDB)
-              + " dB)"
-              + Formatting.RESET);
+      // System.out.println(
+      //     Formatting.BLUE_BOLD
+      //         + "Volume set to "
+      //         + vol
+      //         + "% ("
+      //         + String.format("%.2f", gainDB)
+      //         + " dB)"
+      //         + Formatting.RESET);
       this.volume = gainDB;
     } catch (Exception e) {
       System.out.println(Formatting.RED_BOLD + "Invalid volume." + Formatting.RESET);
@@ -243,33 +295,43 @@ public class MP3Player {
         debug(Formatting.RED_BOLD + "No song is playing." + Formatting.RESET);
         return;
       }
-      audioPlayer.pause();
-      setPaused(true);
-      debug(Formatting.BLUE_BOLD + "Song paused." + Formatting.RESET);
+      synchronized (skipObject) {
+        audioPlayer.pause();
+        setPaused(true);
+      }
+      stopTimeUpdater();
+
     } catch (Exception e) {
-      debug(Formatting.RED_BOLD + "Error pausing the song." + Formatting.RESET);
+
     }
   }
 
   /**
    * Resumes playback of a paused track. Does nothing if no track is paused or if already playing.
    */
-  public synchronized void resume() {
+  public void resume() {
     if (!isAudioPlayerInitialized()) {
+      setPaused(false);
       debug("INTITIALLY PLAYING");
-      play();
+      play(0);
       return;
     } else if (isPaused()) {
       debug("RESUMING FROM PAUSED STATE");
       try {
+        new Thread() {
+          public void run() {
+            audioPlayer.play();
+          }
+        }.start();
         setPaused(false);
-        audioPlayer.play();
-        System.out.println(Formatting.BLUE_BOLD + "Song resumed." + Formatting.RESET);
+        timeUpdaterRunning = true;
+        startSongTimeUpdater();
+        debug("Song resumed.").blue();
       } catch (Exception e) {
-        System.out.println(Formatting.RED_BOLD + "Error resuming the song." + Formatting.RESET);
+        debug("Error resuming the song.").red();
       }
     } else {
-      System.out.println(Formatting.RED_BOLD + "No song is paused." + Formatting.RESET);
+      debug("No Song is paused!").red();
     }
   }
 
@@ -285,72 +347,65 @@ public class MP3Player {
     }
   }
 
-  /** Starts playback of a selected track. Prompts user to select a track if none is specified. */
-  public void play() {
-    Task<Void> playTask =
-        new Task<Void>() {
-          @Override
-          protected Void call() throws Exception {
-            int selectedSong;
-            if (audioPlayer == null || (!isSongPlaying() && !isPaused()) || isPaused()) {
-              selectedSong = 0;
-              if (selectedSong != -1) {
-                play(selectedSong);
-                setPaused(false);
-              }
-            } else {
-              System.out.println(
-                  Formatting.RED_BOLD + "Song is already playing." + Formatting.RESET);
-            }
-            // setVolume(getVolume());
-            return null;
-          }
-        };
-    new Thread(playTask).start();
-  }
-
   /**
    * Plays a specific track from the playlist.
    *
    * @param songNumber index of the song in the playlist
    * @throws NullPointerException if the song file cannot be found or loaded
    */
-  public void play(int songNumber) throws NullPointerException {
-    if (songFileManager.getTracks()[songNumber] == currentSong) {
-      System.out.println("Song already playing!");
-      return;
-    }
+  public void play(int songNumber) {
     try {
-      if (songFileManager.getTracks().length < songNumber) {
-        System.out.println(Formatting.RED_BOLD + "Invalid song number." + Formatting.RESET);
+      if (songFileManager.getTracks().length <= songNumber) {
+        System.out.println("Invalid song number.");
         return;
       }
-      if (isAudioPlayerInitialized()) {
-        Task<Void> pauseTask =
-            new Task<Void>() {
-              @Override
-              protected Void call() throws Exception {
-                audioPlayer.pause();
-                audioPlayer = null;
-                return null;
-              }
-            };
-        new Thread(pauseTask).start();
+
+      // Stoppe aktuelle Wiedergabe
+      if (audioPlayer != null) {
+        audioPlayer.pause();
+        audioPlayer = null;
       }
+      setPaused(false);
+      startSongTimeUpdater();
+      debug(timeUpdaterRunning);
+
       String songPath = songFileManager.getTrackPath(songNumber);
+      Track newTrack = songFileManager.getTracks()[songNumber];
+      currentTrackProperty.set(newTrack);
       audioPlayer = minim.loadMP3File(songPath);
       audioPlayer.play();
       setVolume(getVolume());
-      setPaused(false);
-      setCurrentSong(songFileManager.getTracks()[songNumber]);
-    } catch (NullPointerException e) {
-      System.out.println("Song not found!");
+    } catch (Exception e) {
+      System.out.println("Error playing song: " + e.getMessage());
     }
   }
 
-  private void rewindAndPlay() {
-    audioPlayer.rewind();
-    audioPlayer.play();
+  public void autoPlay() {
+    Track[] tracks = songFileManager.getTracks();
+    int currentSong = -1;
+    for (int i = 0; i < tracks.length; i++) {
+      if (tracks[i] == currentTrackProperty.get()) {
+        currentSong = i;
+        break;
+      }
+    }
+    if (currentSong >= 0 && currentSong < tracks.length - 1) {
+      final int nextSong = currentSong + 1;
+      new Thread() {
+        public void run() {
+          play(nextSong);
+        }
+      }.start();
+    }
+  }
+
+  public void rewindAndPlay() {
+    new Thread() {
+      public void run() {
+        audioPlayer.rewind();
+        audioPlayer.play();
+      }
+    }.start();
   }
 
   /**
@@ -379,7 +434,7 @@ public class MP3Player {
    *
    * @return true if a song is playing, false otherwise
    */
-  public boolean isSongPlaying() {
+  public synchronized boolean isSongPlaying() {
     return audioPlayer != null && audioPlayer.isPlaying();
   }
 
@@ -413,17 +468,36 @@ public class MP3Player {
    *
    * @throws IllegalStateException if no song is currently selected
    */
-  public void next() {
-    setPaused(false);
+  public void skip() {
     if (currentTrackProperty.get() == null) {
       play(0);
+      timeUpdaterRunning = true;
+      startSongTimeUpdater();
       return;
     }
-    int currentIndex =
-        Arrays.asList(songFileManager.getTracks()).indexOf(currentTrackProperty.get());
-    play((currentIndex + 1) % songFileManager.getTracks().length);
-    songTimeThread.start();
+    if (audioPlayer != null) {
+      pause();
+      stopTimeUpdater();
+    }
+    int nextIndex;
+    synchronized (skipObject) {
+      // Berechne den Index des nächsten Tracks
+      Track[] tracks = songFileManager.getTracks();
+      int currentIndex = Arrays.asList(tracks).indexOf(currentTrackProperty.get());
+      nextIndex = (currentIndex + 1) % tracks.length;
+
+      // Dann den neuen Track setzen und abspielen
+      Track nextTrack = tracks[nextIndex];
+      setCurrentSong(nextTrack);
+    }
+    startSongTimeUpdater();
+    new Thread() {
+      public void run() {
+        play(nextIndex);
+      }
+    }.start();
   }
+  ;
 
   /**
    * Plays the previous song in the playlist or rewinds the Song, if a song is currently playing
@@ -431,30 +505,40 @@ public class MP3Player {
    *
    * @throws IllegalStateException if no song is currently selected
    */
-  public void previous() {
+  public void skipBack() {
     if (currentTrackProperty.get() == null) {
       play(0);
+      startSongTimeUpdater();
       return;
     }
-    if (currentTimeProperty.get() >= 2) {
+    if (currentTimeProperty.get() >= 2000) {
       setPaused(false);
       moveTo(0);
+      startSongTimeUpdater();
       return;
     }
-    setPaused(false);
-    int currentIndex =
-        Arrays.asList(songFileManager.getTracks()).indexOf(currentTrackProperty.get());
-    play(
-        (currentIndex - 1 + songFileManager.getTracks().length)
-            % songFileManager.getTracks().length);
-    return;
+    if (audioPlayer != null) {
+      audioPlayer.pause();
+      stopTimeUpdater();
+    }
+    int prevIndex;
+    synchronized (skipObject) {
+      Track[] tracks = songFileManager.getTracks();
+      int currentIndex = Arrays.asList(tracks).indexOf(currentTrackProperty.get());
+      prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+      Track prevTrack = tracks[prevIndex];
+      setCurrentSong(prevTrack);
+    }
+    startSongTimeUpdater();
+    new Thread() {
+      public void run() {
+        play(prevIndex);
+      }
+    }.start();
   }
 
-  public int getCurrentSongDuration() {
-    if (audioPlayer != null) {
-      return (int) (audioPlayer.length() / 1000);
-    }
-    return 0;
+  public synchronized int getCurrentSongDuration() {
+    return audioPlayer.length();
   }
 
   public void setLooping(boolean looping) {
@@ -462,32 +546,48 @@ public class MP3Player {
   }
 
   public boolean isLooping() {
-    return looping;
+    return this.looping;
   }
 
-  public synchronized void moveTo(int t) {
-    Task<Void> moveTask =
-        new Task<Void>() {
-          @Override
-          protected Void call() throws Exception {
-            if (isAudioPlayerInitialized()) {
-              if (t >= 0 && t <= getCurrentSongDuration()) {
-                audioPlayer.cue(t * 1000);
-                System.out.println("Successfully moved to: " + t + " seconds");
-                audioPlayer.play();
-              } else {
-                System.out.println("Invalid time: " + t);
+  public void moveTo(int t) {
+    new Thread() {
+      public void run() {
+        if (isAudioPlayerInitialized()) {
+          if (t >= 0 && t <= getCurrentSongDuration()) {
+            setPaused(false);
+            new Thread() {
+              public void run() {
+                audioPlayer.cue(t);
               }
-            } else {
-              System.out.println("Audio player is not initialized.");
+            }.start();
+            try {
+              Thread.sleep(400);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
             }
-            return null;
+            new Thread() {
+              public void run() {
+                audioPlayer.play();
+              }
+            }.start();
+          } else {
+            System.out.println("Invalid time: " + t);
           }
-        };
-    new Thread(moveTask).start();
+        } else {
+          Platform.runLater(
+              () -> {
+                System.out.println("Audio player is not initialized.");
+              });
+        }
+      }
+    }.start();
   }
 
   public boolean isAudioPlayerInitialized() {
     return audioPlayer != null;
+  }
+
+  public PlaylistManager getSongFileManager() {
+    return songFileManager;
   }
 }

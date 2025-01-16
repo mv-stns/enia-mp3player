@@ -12,6 +12,7 @@ or: color button text hover default
     -color-button-background-pressed: rgb(136, 136, 136);
     -color-button-background-disabled: rgb(89, 89, 89);
     -effects-button-background-default: innershadow(two-pass-box, #3D3D3D, 0, 1, 0, 1);
+    -bool-val: #575757;
 }
 
 .button {
@@ -32,6 +33,7 @@ or: color button text hover default
     -fx-background-color: -color-button-background-default;
     -fx-background-radius: 999em;
     -fx-effect: -effects-button-background-default;
+    -fx-cursor: hand;
 }
 
 .control-buttons:hover {
@@ -50,12 +52,20 @@ or: color button text hover default
     -fx-fill: -icon-color;
 }
 
+.volume-icon {
+    -fx-fill: -icon-color;
+}
+
+.volume-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
 .active-loop .loop-path {
     -fx-fill: transparent;
-    -fx-stroke: #00dc00;
     -fx-stroke-width: 1.5;
     -fx-stroke-line-cap: round;
-    -fx-effect: shadow(two-pass-box, #00dc00, 0, 1, 0, 1);
+    /* -fx-effect: box-shadow(two-pass-box, #00dc00, 0, 1, 0, 1); */
 }
 .loop-path {
     -fx-fill: transparent;
@@ -67,6 +77,10 @@ or: color button text hover default
 .loop-button {
     -fx-background-color: #171717;
     -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+.loop-button:hover {
+    -fx-background-color: -color-button-background-hover;
 }
 
 .time-loop-wrapper {
@@ -77,7 +91,7 @@ or: color button text hover default
 
 .vol-wrapper {
     -fx-background-color: #222222;
-    -fx-background-radius: 16;
+    -fx-background-radius: 999;
     -fx-effect: innershadow(two-pass-box, #3D3D3D, 1, 0, 0, 1);
 }
 .vol-wrapper .volButton {
@@ -98,6 +112,7 @@ or: color button text hover default
     -fx-background-color: white;
     -fx-border-radius: 999em;
     -fx-border-insets: -2;
+    -fx-cursor: hand;
     /* inward subtle shadow */
     /* -fx-effect: -effects-button-background-default; */
 }
@@ -131,6 +146,7 @@ or: color button text hover default
     -fx-border-style: solid;
     -fx-border-width: 0.5;
     -fx-border-color: #292929;
+    -fx-effect: innershadow(two-pass-box, #3D3D3D, 1, 0, 0, 1);
     /* -fx-border-color: linear-gradient(to bottom, white 0%, black 100%); */
 }
 
@@ -152,3 +168,28 @@ or: color button text hover default
 .song-title {
     -fx-fill: white;
 }
+
+.song-card {
+    -fx-background-color: #151515;
+    -fx-background-radius: 12;
+}
+.song-card:hover {
+    -fx-background-color: #222222;
+    -fx-effect: -effects-button-background-default;
+}
+
+.song-card .play-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 999;
+    -fx-cursor: hand;
+}
+.song-card .play-button:hover {
+    -fx-background-color: #303030;
+    -fx-background-radius: 999;
+}
+
+.song-list > .viewport, .scroll-pane > .viewport, .scroll-pane .viewport, .song-list {
+    -fx-background-color: transparent;
+}
+
+

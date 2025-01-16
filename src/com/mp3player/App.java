@@ -2,25 +2,36 @@ package com.mp3player;
 
 import static com.mp3player.utils.Constants.*;
 
-import com.mp3player.App.ResizeGrabber;
 import com.mp3player.business.MP3Player;
 import com.mp3player.presentation.scenes.PlayerView;
 import com.mp3player.presentation.scenes.PlayerViewController;
+import com.mp3player.presentation.scenes.PlaylistView;
+import com.mp3player.presentation.scenes.PlaylistViewController;
+import com.mp3player.utils.Utils;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -29,8 +40,13 @@ public class App extends Application {
   private static Scene scene;
   private static PlayerView playerView;
   private static PlayerViewController playerViewController;
-  private boolean isTrafficLightAnimating = false;
-  private boolean isTrafficLightVisible = false;
+  private static PlaylistView playlistView;
+  private static PlaylistViewController playlistViewController;
+  private boolean isTrafficLightAnimating, isTrafficLightVisible = false;
+  private SVGPath iconLines, iconAudio;
+  private boolean isPlaylistOpen = false;
+  private Stage mainStage;
+  private DoubleProperty stageHeight;
 
   public void init() {
     // Implementation eventueller Business-Logiken
@@ -38,44 +54,120 @@ public class App extends Application {
 
   @Override
   public void start(Stage mainStage) throws Exception {
+    this.mainStage = mainStage;
     MP3Player player = new MP3Player();
     playerViewController = new PlayerViewController(player);
     playerView = playerViewController.getRoot();
+    playlistViewController = new PlaylistViewController(player);
+    playlistView = playlistViewController.getRoot();
 
-    scene = new Scene(playerView, 1440, 800);
+    scene = new Scene(playerView, 1440, 600, true, SceneAntialiasing.BALANCED);
     mainStage.initStyle(StageStyle.TRANSPARENT);
     mainStage.resizableProperty().setValue(Boolean.TRUE);
     mainStage.setMinWidth(434);
+    mainStage.setMaxWidth(900);
+    mainStage.setMaxHeight(900);
     scene.setFill(null);
     StackPane mainContainer = new StackPane();
     mainContainer.getStyleClass().add("mainContainer");
 
     // Rounded Corners for root
-    mainContainer.setPadding(new Insets(24, 24, 24, 24));
+    mainContainer.setPadding(new Insets(24));
     mainContainer.minWidth(450);
-    mainContainer.getChildren().add(playerView);
+    mainContainer.getChildren().addAll(playerView, playlistView);
     mainContainer.setAlignment(Pos.CENTER);
     mainContainer.widthProperty().addListener(p -> updateShape(mainContainer));
     mainContainer.heightProperty().addListener(p -> updateShape(mainContainer));
+    mainContainer.setStyle(
+        mainContainer.getStyle() + "-fx-effect: -effects-button-background-default");
+
+    // PlaylistView Button
+    iconLines =
+        new Utils.PathBuilder()
+            .setContent(
+                "M0.5 0.75C0.5 0.551088 0.579018 0.360322 0.71967 0.21967C0.860322 0.0790175"
+                    + " 1.05109 0 1.25 0H13.25C13.4489 0 13.6397 0.0790175 13.7803"
+                    + " 0.21967C13.921 0.360322 14 0.551088 14 0.75C14 0.948912 13.921 1.13968"
+                    + " 13.7803 1.28033C13.6397 1.42098 13.4489 1.5 13.25 1.5H1.25C1.05109 1.5"
+                    + " 0.860322 1.42098 0.71967 1.28033C0.579018 1.13968 0.5 0.948912 0.5"
+                    + " 0.75ZM0.5 4.75C0.5 4.55109 0.579018 4.36032 0.71967 4.21967C0.860322"
+                    + " 4.07902 1.05109 4 1.25 4H11.25C11.4489 4 11.6397 4.07902 11.7803"
+                    + " 4.21967C11.921 4.36032 12 4.55109 12 4.75C12 4.94891 11.921 5.13968"
+                    + " 11.7803 5.28033C11.6397 5.42098 11.4489 5.5 11.25 5.5H1.25C1.05109 5.5"
+                    + " 0.860322 5.42098 0.71967 5.28033C0.579018 5.13968 0.5 4.94891 0.5"
+                    + " 4.75ZM0.5 8.75C0.5 8.55109 0.579018 8.36032 0.71967 8.21967C0.860322"
+                    + " 8.07902 1.05109 8 1.25 8H7.25C7.44891 8 7.63968 8.07902 7.78033"
+                    + " 8.21967C7.92098 8.36032 8 8.55109 8 8.75C8 8.94891 7.92098 9.13968"
+                    + " 7.78033 9.28033C7.63968 9.42098 7.44891 9.5 7.25 9.5H1.25C1.05109 9.5"
+                    + " 0.860322 9.42098 0.71967 9.28033C0.579018 9.13968 0.5 8.94891 0.5"
+                    + " 8.75ZM0.5 12.75C0.5 12.5511 0.579018 12.3603 0.71967 12.2197C0.860322"
+                    + " 12.079 1.05109 12 1.25 12H6.25C6.44891 12 6.63968 12.079 6.78033"
+                    + " 12.2197C6.92098 12.3603 7 12.5511 7 12.75C7 12.9489 6.92098 13.1397"
+                    + " 6.78033 13.2803C6.63968 13.421 6.44891 13.5 6.25 13.5H1.25C1.05109 13.5"
+                    + " 0.860322 13.421 0.71967 13.2803C0.579018 13.1397 0.5 12.9489 0.5"
+                    + " 12.75Z")
+            .setFill("#6B6B6B")
+            .get();
+    iconAudio =
+        new Utils.PathBuilder()
+            .setContent(
+                "M9.595 0.742996C9.873 0.639996 10.205 0.552996 10.565 0.617996C11.007 0.697996"
+                    + " 11.401 0.946996 11.665 1.31C11.88 1.606 11.945 1.944 11.973 2.24C12"
+                    + " 2.527 12 2.886 12 3.295V3.405C12 3.705 12.002 4.025 11.894 4.32C11.809"
+                    + " 4.5531 11.6754 4.76547 11.502 4.943C11.282 5.168 10.993 5.306 10.722"
+                    + " 5.435L10.654 5.468L8.869 6.325C8.5 6.502 8.177 6.657 7.905 6.757C7.644"
+                    + " 6.854 7.335 6.937 7 6.893V11.179C7 12.993 5.565 14.5 3.75 14.5C1.935"
+                    + " 14.5 0.5 12.993 0.5 11.179C0.5 9.365 1.935 7.857 3.75 7.857C4.37165"
+                    + " 7.85732 4.97975 8.03871 5.5 8.379V4.75H5.503C5.50033 4.58066 5.49933"
+                    + " 4.399 5.5 4.205V4.095C5.5 3.795 5.498 3.475 5.606 3.18C5.69102 2.94689"
+                    + " 5.82464 2.73452 5.998 2.557C6.218 2.332 6.507 2.194 6.778 2.065L6.846"
+                    + " 2.032L8.631 1.175C9 0.997996 9.323 0.842996 9.595 0.742996Z")
+            .setFill("#6B6B6B")
+            .get();
+    iconAudio.setTranslateX(9);
+    iconAudio.setTranslateY(1);
+    Group playlistIcon = new Group(iconLines, iconAudio);
+    HBox plWrapper = new HBox(playlistIcon);
+    playlistIcon.setScaleY(1.2);
+    playlistIcon.setScaleX(1.2);
+
+    plWrapper.setOnMouseClicked(
+        (event) -> {
+          togglePlistButton();
+        });
+    plWrapper.setAlignment(Pos.TOP_CENTER);
+    plWrapper.setCursor(Cursor.HAND);
+    HBox.setHgrow(playlistIcon, Priority.NEVER);
+    plWrapper.setMaxWidth(Region.USE_PREF_SIZE);
+    plWrapper.setMinWidth(Region.USE_PREF_SIZE);
+    plWrapper.setMaxHeight(Region.USE_PREF_SIZE);
+    plWrapper.setMinHeight(Region.USE_PREF_SIZE);
+    plWrapper.setPadding(new Insets(12));
 
     // Traffic Light
     StackPane root = new StackPane();
     TrafficLight trafficLight = new TrafficLight(mainStage);
     ResizeGrabber resizeGrabber = new ResizeGrabber(mainStage);
-    root.getChildren().addAll(mainContainer, trafficLight, resizeGrabber);
+    root.getChildren().addAll(mainContainer, trafficLight, resizeGrabber, plWrapper);
+
     StackPane.setAlignment(trafficLight, Pos.TOP_LEFT);
     trafficLight.setTranslateX(40);
     trafficLight.setTranslateY(40);
     trafficLight.setVisible(false);
+
     StackPane.setAlignment(resizeGrabber, Pos.BOTTOM_RIGHT);
     resizeGrabber.setTranslateX(-25);
     resizeGrabber.setTranslateY(-25);
+
+    StackPane.setAlignment(plWrapper, Pos.TOP_RIGHT);
+    plWrapper.setTranslateX(-25);
+    plWrapper.setTranslateY(25);
+
     root.setPadding(new Insets(0));
-    root.setMinWidth(Region.USE_PREF_SIZE);
-    root.setMinHeight(Region.USE_PREF_SIZE);
     root.setStyle("-fx-background-color: transparent;");
 
     root.setPrefWidth(400);
+    root.setMinWidth(400);
     scene.setRoot(root);
 
     scene.getStylesheets().add("file:src/com/mp3player/style.css");
@@ -132,11 +224,11 @@ public class App extends Application {
                             + mainContainer.getInsets().getRight();
                   }
                   if (newHeight
-                      < 470
+                      < 440
                           + mainContainer.getInsets().getTop()
                           + mainContainer.getInsets().getBottom()) {
                     newHeight =
-                        470
+                        440
                             + mainContainer.getInsets().getTop()
                             + mainContainer.getInsets().getBottom();
                   }
@@ -155,9 +247,50 @@ public class App extends Application {
 
     mainStage.setTitle("MP3 Player");
     mainStage.setMinWidth(400);
-    mainStage.setMinHeight(470);
+    mainStage.setMinHeight(440);
     mainStage.setScene(scene);
     mainStage.show();
+    stageHeight = new SimpleDoubleProperty(mainStage.getHeight());
+    stageHeight.addListener((obs, old, newValue) -> mainStage.setHeight(newValue.doubleValue()));
+  }
+
+  private void togglePlistButton() {
+    if (isPlaylistOpen()) {
+      iconLines.setStyle("-fx-fill: #FF7713");
+      iconAudio.setStyle("-fx-fill: white");
+    } else {
+      iconLines.setStyle("-fx-fill: #6B6B6B");
+      iconAudio.setStyle("-fx-fill: #6B6B6B");
+    }
+    togglePlaylist();
+  }
+
+  private boolean isPlaylistOpen() {
+    return isPlaylistOpen;
+  }
+
+  private void togglePlaylist() {
+    double duration = 1200;
+    Timeline timeline = new Timeline();
+    timeline.getKeyFrames().clear();
+    Interpolator bouncy = Interpolator.SPLINE(0.25, 0.1, 0.25, 1.0);
+
+    if (!isPlaylistOpen) {
+      KeyFrame moveUpFrame =
+          new KeyFrame(
+              Duration.millis(duration),
+              new KeyValue(playlistView.translateYProperty(), -900, bouncy));
+      timeline.getKeyFrames().add(moveUpFrame);
+    } else {
+      KeyFrame moveDownFrame =
+          new KeyFrame(
+              Duration.millis(duration),
+              new KeyValue(playlistView.translateYProperty(), 0, bouncy));
+      timeline.getKeyFrames().add(moveDownFrame);
+    }
+
+    timeline.play();
+    isPlaylistOpen = !isPlaylistOpen;
   }
 
   private void updateShape(StackPane signUp) {
@@ -228,10 +361,7 @@ public class App extends Application {
     private static final double ICON_TRANSLATE_Y = 15.5;
     private static final int BUTTON_SPACING = 18;
 
-    private final Stage mainStage;
-
     public TrafficLight(Stage mainStage) {
-      this.mainStage = mainStage;
       int currentPos = 20;
 
       Circle closeButton = createButton(currentPos, Color.web("#FF5F56"));
@@ -355,9 +485,13 @@ public class App extends Application {
               + " 11.7281 6.20093 11.7993C6.27215 11.8705 6.35698 11.9266 6.45037 11.9644C6.54376"
               + " 12.0021 6.64379 12.0206 6.74449 12.0188C6.8452 12.0171 6.94451 11.995 7.03651"
               + " 11.954C7.12851 11.913 7.21131 11.8539 7.27997 11.7802L12.776 6.28424Z";
-      javafx.scene.shape.SVGPath svgPath = new javafx.scene.shape.SVGPath();
-      svgPath.setContent(svgContent);
-      svgPath.setFill(Color.WHITE); // Set the color of the SVG
+      SVGPath svgPath =
+          new Utils.PathBuilder()
+              .setContent(svgContent)
+              .setFill("white")
+              .setStrokeWidth(1.5)
+              .setStrokeStyle(StrokeLineCap.ROUND)
+              .get();
       resizeGrabber.getChildren().add(svgPath);
       getChildren().add(resizeGrabber);
 
@@ -371,7 +505,7 @@ public class App extends Application {
                   });
             }
           });
-      this.setStyle("-fx-cursor: se-resize;");
+      this.setCursor(javafx.scene.Cursor.SE_RESIZE);
     }
   }
 

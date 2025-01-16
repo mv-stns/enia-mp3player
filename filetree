@@ -1,0 +1,145 @@
+drwx------@    - marcusvaitschulis staff 15 Jan 13:09 .
+.rw-r--r--@ 6.1k marcusvaitschulis staff 15 Jan 12:16 ├── .DS_Store
+.rw-r--r--@  227 marcusvaitschulis staff 13 Nov  2024 ├── .prettierrc.js
+.rwx------@   45 marcusvaitschulis staff 13 Nov  2024 ├── .prettierrc.yaml
+drwx------     - marcusvaitschulis staff 27 Dec  2024 ├── .vscode
+.rw-r--r--@ 1.9k marcusvaitschulis staff  5 Jan 17:23 │   ├── javafx.code-snippets
+.rwx------@  925 marcusvaitschulis staff 27 Dec  2024 │   ├── launch.json
+.rwxr-xr-x@ 1.2k marcusvaitschulis staff 15 Jan 12:00 │   └── settings.json
+.rw-r--r--@    0 marcusvaitschulis staff 15 Jan 13:18 ├── filetree
+drwx------     - marcusvaitschulis staff  6 Nov  2024 ├── lib
+.rwx------@ 7.8k marcusvaitschulis staff 22 Oct  2024 │   ├── eia_StaticScanner.jar
+.rwx------@ 3.3k marcusvaitschulis staff 25 Oct  2024 │   ├── formatter.jar
+drwx------     - marcusvaitschulis staff  6 Nov  2024 │   ├── minim_library
+.rwx------@ 3.5k marcusvaitschulis staff  8 Oct  2024 │   │   ├── eia_simpleminim_v2.jar
+.rwx------@ 277k marcusvaitschulis staff 18 Oct  2015 │   │   ├── jl1.0.1.jar
+.rwx------@  64k marcusvaitschulis staff 18 Oct  2015 │   │   ├── jsminim.jar
+.rwx------@ 137k marcusvaitschulis staff 18 Oct  2015 │   │   ├── minim.jar
+.rwx------@  25k marcusvaitschulis staff 18 Oct  2015 │   │   ├── mp3spi1.9.5.jar
+.rwx------@  10k marcusvaitschulis staff 18 Oct  2015 │   │   ├── tritonus_aos.jar
+.rwx------@ 103k marcusvaitschulis staff 18 Oct  2015 │   │   └── tritonus_share.jar
+.rwx------@  77k marcusvaitschulis staff  8 Oct  2024 │   ├── mp3agic.jar
+.rwx------@ 2.3k marcusvaitschulis staff  8 Oct  2024 │   ├── mp3ui.jar
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │   └── openjfx-23.0.1_osx-aarch64_bin-sdk
+drwx------     - marcusvaitschulis staff  6 Nov  2024 │       └── javafx-sdk-23.0.1
+drwx------     - marcusvaitschulis staff  6 Nov  2024 │           ├── legal
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │           │   ├── javafx.base
+.rwx------@ 2.1k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ADDITIONAL_LICENSE_INFO
+.rwx------@ 1.5k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ASSEMBLY_EXCEPTION
+.rwx------@  19k marcusvaitschulis staff 15 Oct  2024 │           │   │   └── LICENSE
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │           │   ├── javafx.controls
+.rwx------@ 2.1k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ADDITIONAL_LICENSE_INFO
+.rwx------@ 1.5k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ASSEMBLY_EXCEPTION
+.rwx------@  19k marcusvaitschulis staff 15 Oct  2024 │           │   │   └── LICENSE
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │           │   ├── javafx.fxml
+.rwx------@ 2.1k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ADDITIONAL_LICENSE_INFO
+.rwx------@ 1.5k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ASSEMBLY_EXCEPTION
+.rwx------@  19k marcusvaitschulis staff 15 Oct  2024 │           │   │   └── LICENSE
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │           │   ├── javafx.graphics
+.rwx------@ 2.1k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ADDITIONAL_LICENSE_INFO
+.rwx------@ 1.5k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ASSEMBLY_EXCEPTION
+.rwx------@ 2.0k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── jpeg_fx.md
+.rwx------@  19k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── LICENSE
+.rwx------@ 5.7k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── mesa3d.md
+.rwx------@ 1.4k marcusvaitschulis staff 15 Oct  2024 │           │   │   └── pipewire.md
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │           │   ├── javafx.media
+.rwx------@ 2.1k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ADDITIONAL_LICENSE_INFO
+.rwx------@ 1.5k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ASSEMBLY_EXCEPTION
+.rwx------@ 1.2k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── directshow.md
+.rwx------@ 1.2k marcusvaitschulis staff 30 Oct  2024 │           │   │   ├── 'directshow 2.md'
+.rwx------@  33k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── glib.md
+.rwx------@  38k marcusvaitschulis staff 30 Oct  2024 │           │   │   ├── gstreamer.md
+.rwx------@ 2.6k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── libffi.md
+.rwx------@  19k marcusvaitschulis staff 15 Oct  2024 │           │   │   └── LICENSE
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │           │   ├── javafx.swing
+.rwx------@ 2.1k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ADDITIONAL_LICENSE_INFO
+.rwx------@ 1.5k marcusvaitschulis staff 15 Oct  2024 │           │   │   ├── ASSEMBLY_EXCEPTION
+.rwx------@  19k marcusvaitschulis staff 15 Oct  2024 │           │   │   └── LICENSE
+drwx------@    - marcusvaitschulis staff  6 Nov  2024 │           │   └── javafx.web
+.rwx------@ 2.1k marcusvaitschulis staff 15 Oct  2024 │           │       ├── ADDITIONAL_LICENSE_INFO
+.rwx------@ 1.5k marcusvaitschulis staff 15 Oct  2024 │           │       ├── ASSEMBLY_EXCEPTION
+.rwx------@  22k marcusvaitschulis staff 15 Oct  2024 │           │       ├── icu_web.md
+.rwx------@  22k marcusvaitschulis staff 30 Oct  2024 │           │       ├── 'icu_web 2.md'
+.rwx------@ 3.7k marcusvaitschulis staff 15 Oct  2024 │           │       └── libxml2.md
+drwx------     - marcusvaitschulis staff  6 Nov  2024 │           └── lib
+.rwx------@  37k marcusvaitschulis staff 15 Oct  2024 │               ├── javafx-swt.jar
+.rwx------@ 757k marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.base.jar
+.rwx------@ 2.6M marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.controls.jar
+.rwx------@ 131k marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.fxml.jar
+.rwx------@ 4.5M marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.graphics.jar
+.rwx------@ 290k marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.media.jar
+.rwx------@   77 marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.properties
+.rwx------@  91k marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.swing.jar
+.rwx------@ 729k marcusvaitschulis staff 15 Oct  2024 │               ├── javafx.web.jar
+.rwx------@ 106k marcusvaitschulis staff 15 Oct  2024 │               ├── libdecora_sse.dylib
+.rwx------@  95k marcusvaitschulis staff 15 Oct  2024 │               ├── libfxplugins.dylib
+.rwx------@ 423k marcusvaitschulis staff 15 Oct  2024 │               ├── libglass.dylib
+.rwx------@ 1.3M marcusvaitschulis staff 15 Oct  2024 │               ├── libglib-lite.dylib
+.rwx------@ 1.7M marcusvaitschulis staff 15 Oct  2024 │               ├── libgstreamer-lite.dylib
+.rwx------@ 101k marcusvaitschulis staff 15 Oct  2024 │               ├── libjavafx_font.dylib
+.rwx------@ 311k marcusvaitschulis staff 15 Oct  2024 │               ├── libjavafx_iio.dylib
+.rwx------@ 239k marcusvaitschulis staff 30 Oct  2024 │               ├── libjfxmedia.dylib
+.rwx------@ 122k marcusvaitschulis staff 15 Oct  2024 │               ├── libjfxmedia_avf.dylib
+.rwx------@  35k marcusvaitschulis staff 15 Oct  2024 │               ├── libprism_common.dylib
+.rwx------@  97k marcusvaitschulis staff 15 Oct  2024 │               ├── libprism_es2.dylib
+.rwx------@ 107k marcusvaitschulis staff 15 Oct  2024 │               └── libprism_sw.dylib
+.rw-r--r--@ 144k marcusvaitschulis staff 13 Nov  2024 ├── package-lock.json
+.rw-r--r--@  698 marcusvaitschulis staff 13 Nov  2024 ├── package.json
+.rwx------@    5 marcusvaitschulis staff 20 Nov  2024 ├── README.md
+drwx------     - marcusvaitschulis staff 27 Dec  2024 └── src
+.rw-r--r--@ 6.1k marcusvaitschulis staff 27 Dec  2024     ├── .DS_Store
+drwx------     - marcusvaitschulis staff  6 Nov  2024     ├── com
+drwx------     - marcusvaitschulis staff 27 Dec  2024     │   └── mp3player
+.rw-r--r--@ 6.1k marcusvaitschulis staff 17 Dec  2024     │       ├── .DS_Store
+.rwxr-xr-x@  15k marcusvaitschulis staff 15 Jan 12:50     │       ├── App.java
+drwxr-xr-x@    - marcusvaitschulis staff 27 Dec  2024     │       ├── business
+.rwx------@ 1.1k marcusvaitschulis staff 17 Dec  2024     │       │   ├── MP3Controls.java
+.rwxr-xr-x@  15k marcusvaitschulis staff 15 Jan 09:48     │       │   ├── MP3Player.java
+.rwx------@ 1.9k marcusvaitschulis staff 28 Dec  2024     │       │   ├── PlaylistManager.java
+.rwx------@ 1.5k marcusvaitschulis staff 17 Dec  2024     │       │   └── Track.java
+drwxr-xr-x@    - marcusvaitschulis staff 17 Dec  2024     │       ├── presentation
+.rw-r--r--@ 6.1k marcusvaitschulis staff 17 Dec  2024     │       │   ├── .DS_Store
+drwxr-xr-x@    - marcusvaitschulis staff 27 Dec  2024     │       │   ├── components
+.rw-r--r--@    0 marcusvaitschulis staff 15 Jan 09:52     │       │   │   ├── controls.css
+.rw-r--r--@  10k marcusvaitschulis staff 15 Jan 12:55     │       │   │   ├── Controls.java
+.rw-r--r--@ 2.6k marcusvaitschulis staff  4 Jan 12:25     │       │   │   ├── SongInfo.java
+.rw-r--r--@  115 marcusvaitschulis staff 17 Dec  2024     │       │   │   ├── Styleable.java
+.rw-r--r--@ 2.1k marcusvaitschulis staff 27 Dec  2024     │       │   │   └── TimerView.java
+.rw-r--r--@  180 marcusvaitschulis staff 17 Dec  2024     │       │   ├── Controller.java
+drwxr-xr-x@    - marcusvaitschulis staff 27 Dec  2024     │       │   └── scenes
+.rw-r--r--@  921 marcusvaitschulis staff 17 Dec  2024     │       │       ├── PlayerView.java
+.rw-r--r--@ 9.0k marcusvaitschulis staff 15 Jan 13:02     │       │       └── PlayerViewController.java
+.rw-r--r--@ 5.4k marcusvaitschulis staff 15 Jan 12:56     │       ├── style.css
+drwxr-xr-x@    - marcusvaitschulis staff 15 Jan 09:55     │       └── utils
+.rw-r--r--@ 3.4k marcusvaitschulis staff  4 Jan 12:57     │           ├── Constants.java
+.rw-r--r--@ 2.4k marcusvaitschulis staff 15 Jan 12:57     │           └── Utils.java
+drwxr-xr-x@    - marcusvaitschulis staff 17 Dec  2024     └── resources
+.rw-r--r--@ 6.1k marcusvaitschulis staff 17 Dec  2024         ├── .DS_Store
+drwx------@    - marcusvaitschulis staff 14 Jan 22:10         ├── audio
+.rw-r--r--@ 6.1k marcusvaitschulis staff 17 Dec  2024         │   ├── .DS_Store
+.rw-r--r--@  205 marcusvaitschulis staff 14 Jan 22:09         │   ├── .spotdl-cache
+.rwx------@ 1.3M marcusvaitschulis staff 10 Nov  2016         │   ├── 01_LastMembrane.mp3
+.rw-r--r--@ 8.3M marcusvaitschulis staff 14 Jan 22:09         │   ├── 'Bad Bunny - DtMF.mp3'
+.rwx------@ 6.7M marcusvaitschulis staff 27 Oct  2024         │   ├── 'Niko B - Whys This Dealer (nuphory & SAM WAITIN rally house remix).mp3'
+.rwx------@ 5.0M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes, Cise Starr & Akin from CYNE - Feather (feat. Cise Starr & Akin from CYNE).mp3'
+.rwx------@ 6.5M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes, Cise Starr - Lady Brown (feat. Cise Starr from CYNE).mp3'
+.rwx------@ 8.1M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - aruarian dance.mp3'
+.rwx------@ 7.4M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - Beat laments the world.mp3'
+.rwx------@ 8.4M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - Counting Stars.mp3'
+.rwx------@ 6.7M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - Kumomi.mp3'
+.rwx------@ 8.0M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - reflection eternal.mp3'
+.rwx------@ 6.6M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - silver morning.mp3'
+.rwx------@ 7.1M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - The Final View.mp3'
+.rwx------@ 8.6M marcusvaitschulis staff 23 Oct  2024         │   ├── 'Nujabes - the space between two world.mp3'
+.rwx------@ 2.2M marcusvaitschulis staff 23 Oct  2024         │   └── 'Tomppabeats - Blossom Samurai (Michita - Softtyms Reflip).mp3'
+drwxr-xr-x     - marcusvaitschulis staff 17 Dec  2024         ├── fonts
+.rwxr-xr-x@ 4.5M marcusvaitschulis staff  9 Nov  2023         │   ├── SF-Pro-Rounded-Regular.otf
+.rwxr-xr-x@ 4.7M marcusvaitschulis staff  9 Nov  2023         │   └── SF-Pro-Rounded-Semibold.otf
+drwxr-xr-x@    - marcusvaitschulis staff 15 Jan 12:00         └── images
+.rw-r--r--@  16k marcusvaitschulis staff 14 Nov  2024             ├── album_cover.png
+.rw-r--r--@  20k marcusvaitschulis staff 27 Nov  2024             ├── borderPattern.png
+.rw-r--r--@  526 marcusvaitschulis staff 27 Nov  2024             ├── fr19.png
+.rw-r--r--@ 3.0k marcusvaitschulis staff 15 Jan 12:00             ├── loopingTrue.svg
+.rw-r--r--@  10M marcusvaitschulis staff 27 Nov  2024             ├── pattern.jpeg
+.rw-r--r--@  12M marcusvaitschulis staff 27 Nov  2024             ├── pattern.jpg
+.rw-r--r--@ 2.7M marcusvaitschulis staff 27 Nov  2024             └── pattern.webp

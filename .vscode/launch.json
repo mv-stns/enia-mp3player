@@ -9,7 +9,7 @@
             "name": "Run MP3Player",
             "request": "launch",
             "mainClass": "com.mp3player.App",
-            "vmArgs": "--module-path \"lib/openjfx-23.0.1_osx-aarch64_bin-sdk/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.media,javafx.graphics"
+            "vmArgs": "--module-path \"lib/openjfx-23.0.1_osx-aarch64_bin-sdk/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.fxml,javafx.media,javafx.graphics",
         },
         {
             "type": "java",

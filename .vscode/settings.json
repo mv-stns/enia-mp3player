@@ -27,4 +27,12 @@
     "[snippets]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "java.debug.settings.hotCodeReplace":"auto",
+    "java.autobuild.enabled": true,
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    }
 }

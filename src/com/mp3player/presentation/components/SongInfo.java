@@ -1,19 +1,9 @@
 package com.mp3player.presentation.components;
 
-import static com.mp3player.utils.Constants.*;
-
 import com.mp3player.business.MP3Player;
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -27,11 +17,7 @@ public class SongInfo extends VBox {
   private VBox songInfo;
   public ImageView albumCover;
   private ImageViewPane albumCoverWrapper;
-  public Text songTitle;
-  public Text songArtist;
-  public Text songAlbum;
-  public Image cover;
-  private TimerView timerView;
+  public Text songTitle, songArtist, songAlbum;
 
   public SongInfo() {
     final int imageWidth = 100;
@@ -54,16 +40,20 @@ public class SongInfo extends VBox {
 
     albumCover = new ImageView();
     setImage();
-    albumCoverWrapper = new ImageViewPane(albumCover);
+    albumCover.setPickOnBounds(true);
+    albumCover.setFitHeight(100);
+    albumCoverWrapper = new ImageViewPane();
+    albumCoverWrapper.setImageView(albumCover);
     albumCoverWrapper.getStyleClass().add("album-cover");
     albumCoverWrapper.setPrefSize(imageWidth, imageWidth);
     albumCoverWrapper.setMinSize(imageWidth, imageWidth);
     albumCoverWrapper.setMaxSize(imageWidth, imageWidth);
-
     Rectangle mask = new Rectangle(imageWidth, imageWidth);
     mask.setArcWidth(24);
     mask.setArcHeight(24);
     albumCoverWrapper.setClip(mask);
+
+    albumCoverWrapper.setStyle("-fx-overflow: visible;");
 
     VBox songDetails = new VBox(10);
     songDetails.getChildren().addAll(albumCoverWrapper, songTitle, songArtist, songAlbum);

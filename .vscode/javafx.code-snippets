@@ -41,4 +41,13 @@
         "body": ["synchronized ($1) {", "\t$2", "}"],
         "description": "Creates an JavaFX Event Handler",
     },
+    "Lambda Quick Thread Run": {
+        "prefix": "lthr",
+        "body": [
+            "new Thread(() -> {",
+            "\t$1",
+            "}).run();"
+        ],
+        "description": "Creates an JavaFX Event Handler",
+    },
 }
